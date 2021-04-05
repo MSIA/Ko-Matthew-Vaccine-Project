@@ -1,4 +1,5 @@
-# MSiA423 Template Repository
+# MSiA423 Project Matthew Ko
+## QA: Christina Chang
 
 <!-- toc -->
 
