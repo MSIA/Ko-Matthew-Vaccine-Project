@@ -1,5 +1,6 @@
-# MSiA423 Project Matthew Ko
-## QA: Christina Chang
+# MSiA423 Project 
+### Author: Matthew Ko
+### QA: Christina Chang
 
 <!-- toc -->
 
