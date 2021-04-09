@@ -29,7 +29,7 @@ There is a lot of stress on many people from various causes due to the pandemic.
 Using the Household Pulse Survey public use files, link:https://www.census.gov/programs-surveys/household-pulse-survey/datasets.html, this project will identify the most useful features of the survey in determining depression, low interest, worry, and anxiety. Then, will use a classification based model to predict how likely a user is to have one of these ailments. Lastly, provide steps and resources to help users better navigate these issues. 
 ### 3. Success Criteria
 #### 1. Machine Learning Performance Metric
-The model will be assessed using metrics suitable for classification, such as accuracy, F1-score, and recall. In this case recall will likely be emphasized to minimize the model missing a health ailment that a user may have. A recall of 70% required to go live with model.
+The model will be assessed using metrics suitable for classification, such as accuracy, F1-score, and recall. In this case recall will likely be emphasized to minimize the model missing a mental health ailment that a user may have. A recall of 70% required to go live with model.
 #### 2. Business Metric
 The business metric will be measured directly through the app, either through an explicit user response of the given resources such as a "useful" button, or implicit user responses such as the percentage of times a link to a given resource was clicked out of how many times a given link was provided to users. This will track how useful the resources we provided are to actualy users of the app.
 ## Directory structure 
