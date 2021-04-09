@@ -31,7 +31,7 @@ Using the Household Pulse Survey public use files, [link](https://www.census.gov
 #### 1. Machine Learning Performance Metric
 The model will be assessed using metrics suitable for classification, such as accuracy, F1-score, and recall. In this case recall will likely be emphasized to minimize the model missing a mental health ailment that a user may have. A recall of 70% required to go live with model.
 #### 2. Business Metric
-The business metric will be measured directly through the app, either through an explicit user response of the given resources such as a "useful" button, or implicit user responses such as the percentage of times a link to a given resource was clicked out of how many times a given link was provided to users. This will track how useful the resources we provided are to actualy users of the app.
+The business metric will be measured directly through the app, either through an explicit user response of the given resources such as a "useful" button, or implicit user responses such as the percentage of times a link to a given resource was clicked out of how many times a given link was provided to users. This will track how useful the resources we provided are to actualy users of the app. Ideally, more than 50% of users find the resources useful for them.
 ## Directory structure 
 
 ```
