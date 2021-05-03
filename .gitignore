@@ -4,12 +4,12 @@ __pycache__/
 *.class
 .DS_Store
 .idea/
-.log
+*.log
+*.jar
 .ipynb_checkpoints/
 
 
 data/*
-!data/sample/
-!data/external/
+!data/raw/
 config/local
 !.gitkeep
