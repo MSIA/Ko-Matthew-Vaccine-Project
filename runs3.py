@@ -13,7 +13,7 @@ if __name__ == '__main__':
     parser.add_argument('--sep',
                         default=';',
                         help="CSV separator if using pandas")
-    parser.add_argument('--s3path', default='s3://2021-msia423-ko-matthew/raw/pulse2021test.csv',
+    parser.add_argument('--s3path', default='s3://2021-msia423-ko-matthew/raw/pulse2021.csv',
                         help="If used, will load data via pandas")
     parser.add_argument('--local_path', default='data/raw/pulse2021_puf_27.csv',
                         help="Where to load data to in S3")
@@ -23,10 +23,4 @@ if __name__ == '__main__':
 
     unzip(config.RAW_ZIP_LOCATION,config.RAW_LOCATION,config.DATA_FILENAME)
 
-
     upload_s3(args.local_path, args.s3path)
-
-    # if uploaded:
-    #     logger.info("File uploaded to S3 successfully.")
-    # else:
-    #     logger.error("File upload to S3 was unsuccessful.")

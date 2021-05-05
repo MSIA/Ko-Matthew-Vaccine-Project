@@ -1,7 +1,4 @@
 from os import path
-import datetime
-from scipy import stats
-import numpy as np
 
 PROJECT_HOME = path.dirname(path.dirname(path.abspath(__file__)))
 
