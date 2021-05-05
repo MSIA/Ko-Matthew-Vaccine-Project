@@ -11,5 +11,5 @@ __pycache__/
 
 data/*
 !data/raw/
-config/local
+config/local/*
 !.gitkeep
