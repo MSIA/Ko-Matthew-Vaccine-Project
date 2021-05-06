@@ -117,7 +117,7 @@ This command builds the Docker image for ingesting and setting up the databse, w
 To push data to S3, run from this directory:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY vaccine_project run.py --ingest --s3path='s3://your-bucket/location-of-file-in-s3'
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY vaccine_project run.py ingest --s3path='s3://your-bucket/location-of-file-in-s3'
 ```
 
 This command runs the `run.py` command in the `project` image to download the data from the source website, unzip it, and push the data into S3.
