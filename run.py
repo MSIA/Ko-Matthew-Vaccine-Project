@@ -1,12 +1,8 @@
 import os
 from src.ingest import upload_s3, parse_s3, get_zip, unzip
 from src.createdb import create_db
-import logging
+from config import config
 import argparse
-
-# set up logging config
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
-logger = logging.getLogger(__file__)
 
 # Add parsers for both creating a database and adding songs to it
 parser = argparse.ArgumentParser(description="Create database or upload data to s3")
