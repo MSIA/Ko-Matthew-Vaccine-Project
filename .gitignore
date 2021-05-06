@@ -10,6 +10,5 @@ __pycache__/
 notebooks/*
 
 data/*
-!data/raw/
 config/local/*
 !.gitkeep
