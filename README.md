@@ -128,15 +128,7 @@ This command runs the `run.py` command in the `project` image to download the da
 #### Create the database
 To create the database in the location configured in `config.py` run:
 
-`docker run \
-    -e MYSQL_HOST \
-    -e MYSQL_USER \
-    -e MYSQL_DB \
-    -e MYSQL_PASSWORD \
-    -e MYSQL_PORT \
-    -e SQLALCHEMY_DATABASE_URI \
-    --mount type=bind,source="$(pwd)/data/",target=/app/data/ \
-     vaccine_project run.py create_db`
+`docker run -e MYSQL_HOST -e MYSQL_USER -e MYSQL_DB -e MYSQL_PASSWORD -e MYSQL_PORT -e SQLALCHEMY_DATABASE_URI --mount type=bind,source="$(pwd)/data/",target=/app/data vaccine_project run.py create_db`
 
 If the MYSQL_HOST environment variable is set, the above command will attempt to connect to AWS RDS services and create the database there at the specified RDS instance.
 
