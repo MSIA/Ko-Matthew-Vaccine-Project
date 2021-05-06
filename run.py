@@ -10,19 +10,20 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
 logger = logging.getLogger(__file__)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+
+    # Add parsers for both creating a database and adding songs to it
+    parser = argparse.ArgumentParser(description="Create and/or add data to database")
     subparsers = parser.add_subparsers(dest='subparser_name')
 
+    # Sub-parser for creating a database
     sb_create = subparsers.add_parser("create_db", description="Create database")
-    # sb_create.add_argument("--engine_string", default=SQLALCHEMY_DATABASE_URI,
-    #                        help="SQLAlchemy connection URI for database")
+    sb_create.add_argument("--engine_string", default=SQLALCHEMY_DATABASE_URI,
+                           help="SQLAlchemy connection URI for database")
 
-    sb_ingest = subparsers.add_parser("ingest", description="Add data to database",
-                                        help="Used for ingesting data into s3")
-
+    # Sub-parser for ingesting new data
+    sb_ingest = subparsers.add_parser("ingestion", description="Add data to database")
     sb_ingest.add_argument('--s3path',default='s3://2021-msia423-ko-matthew/raw/pulse2021.csv',
                         help="If used, will load data to specified path")
-
     sb_ingest.add_argument('--local_path', default='data/raw/pulse2021_puf_27.csv',
                         help="Where to load data to in S3")
 
@@ -31,7 +32,7 @@ if __name__ == '__main__':
 
     if sp_used == 'create_db':
         create_db()
-    elif sp_used == 'ingest':
+    elif sp_used == 'ingestion':
         get_zip(config.SOURCE_URL,config.RAW_ZIP_LOCATION)
         unzip(config.RAW_ZIP_LOCATION,config.RAW_LOCATION,config.DATA_FILENAME)
         upload_s3(args.local_path, args.s3path)
