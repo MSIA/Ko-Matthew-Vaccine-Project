@@ -90,6 +90,7 @@ The following environment variables are needed for the application to run in rel
 For S3 services:
 * AWS_ACCESS_KEY_ID
 * AWS_SECRET_ACCESS_KEY
+
 For RDS services:
 * MYSQL_HOST
 * MYSQL_PORT
