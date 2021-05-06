@@ -78,6 +78,51 @@ The business metric will be tracked by the number of users. If the number of use
 ```
 
 ## Running the app
+
+### 1. Set up environment variables
+
+Configuration files for running web app are located in the `config/` folder.
+CHANGEME.env needs to be renamed to config.env and it includes a place to store S3 Access Keys and RDS Host,User,Password,Port,and db information.\
+config.py includes variables to configure local data storage, as well as S3 bucket information\
+flaskconfig.py includes configurations for flask app, including local and RDS MYSQL databases.
+
+#### 1.1: how to set up environment variables required\
+
+The following environment variables are needed for the application to run in relation to AWS S3 and and RDS services.
+
+* AWS_ACCESS_KEY_ID
+* AWS_SECRET_ACCESS_KEY
+* MYSQL_HOST
+* MYSQL_PORT
+* MYSQL_USER
+* MYSQL_PASSWORD
+* MYSQL_DB
+
+The provided CHANGEME.env file is provided for the user to edit and use for setting up the required environment variables. The user will then pass the required environment variables through subsequent docker run commands using -e or --env-file arguments. The CHANGEME.env file is not required if the user already has these environment variables currently defined. If the MYSQL_* variables are not set, the user can set the database to be built locally rather than through AWS RDS.
+
+### 2. Build the image
+
+The Dockerfile used for running the ingestion and setting up the database is located in the `app/` folder.
+
+To build the image for ingesting the data and setting up the database, run this command from the root of the repository:
+
+```bash
+ docker build -f app/Dockerfile -t vaccine_project .
+```
+
+This command builds the Docker image for ingesting and setting up the databse, with the tag `project`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
+
+### 3. Push data to S3
+
+To push data to S3, run from this directory:
+
+```bash
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY vaccine_project run.py --ingest --s3path='s3://your-bucket/location-of-file-in-s3'
+```
+
+This command runs the `run.py` command in the `project` image to download the data from the source website, unzip it, and push the data into S3.
+
+
 ### 1. Initialize the database
 
 #### Create the database
