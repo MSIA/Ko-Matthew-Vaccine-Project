@@ -1,23 +1,14 @@
 import os
-import sys
 from config.flaskconfig import SQLALCHEMY_DATABASE_URI
 import logging
 
 import sqlalchemy as sql
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, MetaData, Float, Text
-
-import argparse
+from sqlalchemy import Column, Integer, Float
 
 # set up logging config
 logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__file__)
-
-#argparse
-parser = argparse.ArgumentParser(description="Create defined tables in database, for local or AWS database push")
-
-args = parser.parse_args()
 
 Base = declarative_base()
 
@@ -49,4 +40,3 @@ def create_db():
     Base.metadata.create_all(engine)
 
     logger.info("Vaccine Sentiment Database created successfully!")
-    
