@@ -11,10 +11,7 @@
     + [How to set up environment variables required](#how-to-set-up-environment-variables-required)
   * [2. Build the image](#2-build-the-image)
   * [3. Push data to S3](#3-push-data-to-s3)
-- [Running the app in Docker](#running-the-app-in-docker)
-  * [1. Build the image](#1-build-the-image)
-  * [2. Run the container](#2-run-the-container)
-  * [3. Kill the container](#3-kill-the-container)
+  * [4. Initialize the database](#4-initialize-the-database)
   * [Workaround for potential Docker problem for Windows.](#workaround-for-potential-docker-problem-for-windows)
 
 <!-- tocstop -->
@@ -123,7 +120,7 @@ docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY vaccine_project run.py 
 This command runs the `run.py` command in the `project` image to download the data from the source website, unzip it, and push the data into S3.
 
 
-### 1. Initialize the database
+### 4. Initialize the database
 
 #### Create the database
 To create the database in the location configured in `config.py` run:
@@ -143,3 +140,5 @@ docker run \
 If the MYSQL_HOST environment variable is set, the above command will attempt to connect to AWS RDS services and create the database there at the specified RDS instance.
 
 Without a MYSQL_HOST environment variable set, the above command creates a local database located at `sqlite:///data/vSentiment.db`. If you would like to set the location of the database, please set the SQLALCHEMY_DATABASE_URI environment variable to the appropriate connection string before running the above command. Otherwise, it will be automatically generated and set to `sqlite:///data/vSentiment.db` and pass it into the docker run command above instead of / in addition to the environment variables listed above.
+
+For midpoint PR: The table name created is called "vaccine_model" in both RDS and the local database. For chloe and fausto's convenience, will be removed later. 
