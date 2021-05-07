@@ -9,6 +9,5 @@ __pycache__/
 *.db
 .ipynb_checkpoints/
 
-data/raw/*
 config/local/*
 !.gitkeep
