@@ -1,14 +1,12 @@
-import os
-from config.flaskconfig import SQLALCHEMY_DATABASE_URI
-import logging
+import logging.config
 
+import os
 import sqlalchemy as sql
+from config.flaskconfig import SQLALCHEMY_DATABASE_URI
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, Float
 
-# set up logging config
-logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', level=logging.DEBUG)
-logger = logging.getLogger(__file__)
+logger = logging.getLogger(__name__)
 
 Base = declarative_base()
 
@@ -36,7 +34,7 @@ def create_db():
     # set up mysql connection
     engine = sql.create_engine(SQLALCHEMY_DATABASE_URI)
 
-    # create the vaccine model table
+    # create the vaccine_model table
     Base.metadata.create_all(engine)
 
     logger.info("Vaccine Sentiment Database created successfully!")
