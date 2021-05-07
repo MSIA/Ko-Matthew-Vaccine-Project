@@ -98,7 +98,7 @@ export MYSQL_PORT="MY_PORT"
 export MYSQL_DATABASE="MY_DATABASE"
 ```
 
-The provided CHANGEME.env file is provided for the user to edit and use for setting up the required environment variables as well. The user can then pass the required environment variables through subsequent docker run commands using -e or --env-file arguments. The CHANGEME.env file is not required if the user already has the required environment variables currently defined. If the MYSQL_* variables are not set, the user can set the database to be built locally rather than through AWS RDS.
+The CHANGEME.env file in the `config` folder is provided for the user to edit and use for setting up the required environment variables as well. The user can then pass the required environment variables through subsequent docker run commands using -e or --env-file arguments. The CHANGEME.env file is not required if the user already has the required environment variables currently defined. If the MYSQL_* variables are not set, the user can set the database to be built locally rather than through AWS RDS.
 
 ### 2. Build the image
 
