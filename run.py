@@ -3,20 +3,19 @@ import os
 import logging.config
 from config import config
 
-
 from src.ingest import upload_s3, parse_s3, get_zip, unzip
 from src.createdb import create_db
 
 logging.config.fileConfig('config/logging/local.conf')
 
-# Add parsers for both creating a database and adding songs to it
+# Add parsers for both creating a database and uploading source data to s3 bucket
 parser = argparse.ArgumentParser(description="Create database or upload data to s3")
 subparsers = parser.add_subparsers(dest='subparser_name')
 
 # Sub-parser for creating a database
 sb_create = subparsers.add_parser("create_db", description="Create database")
 
-# Sub-parser for ingesting new data
+# Sub-parser for ingesting new data into s3 bucket
 sb_ingest = subparsers.add_parser("ingest", description="Add data to s3 bucket")
 sb_ingest.add_argument('--s3path',default='s3://2021-msia423-ko-matthew/raw/pulse2021.csv',
                     help="If used, will load data to specified path")

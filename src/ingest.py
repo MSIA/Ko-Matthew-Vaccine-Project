@@ -77,7 +77,6 @@ def upload_s3(local_path, s3path):
 
     try:
         response = client.upload_file(local_path, s3bucket, s3_just_path)
-        # bucket.upload_file(local_path, s3_just_path)
     except botocore.exceptions.NoCredentialsError:
         logger.error('Please provide AWS credentials via AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env variables.')
     else:
