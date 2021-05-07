@@ -11,8 +11,7 @@ logger = logging.getLogger(__name__)
 Base = declarative_base()
 
 class vSentiment(Base):
-    """Create a table used to store model parameters and features
-        used to predict reasons why a person may not get the COVID-19 vaccine"""
+    """Create a table used to store model parameters for application use"""
     __tablename__ = 'vaccine_model'
     id = Column(Integer, primary_key=True)
     female = Column(Float, unique=False, nullable=True)

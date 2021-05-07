@@ -26,7 +26,6 @@ args = parser.parse_args()
 sp_used = args.subparser_name
 
 if __name__ == '__main__':
-
     if sp_used == 'create_db':
         create_db()
     elif sp_used == 'ingest':

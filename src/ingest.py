@@ -63,12 +63,11 @@ def parse_s3(s3path):
 def upload_s3(local_path, s3path):
     '''Uploads file to s3 Bucket
     Args:
-        local_path (str): the filepath of file that will be uploaded
+        local_path (str): the filepath location of file that will be uploaded
         s3path (str): the path where the file will be located on s3
     Returns:
         None
     '''
-
     session = boto3.Session(aws_access_key_id = os.environ.get('AWS_ACCESS_KEY_ID'),
                                 aws_secret_access_key = os.environ.get('AWS_SECRET_ACCESS_KEY'))
     client = session.client('s3')
