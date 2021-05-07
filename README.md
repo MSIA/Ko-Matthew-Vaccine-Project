@@ -132,7 +132,7 @@ To create the database either in RDS or locally run from this directory:
 docker run \
     -e MYSQL_HOST \
     -e MYSQL_USER \
-    -e MYSQL_DB \
+    -e MYSQL_DATABASE \
     -e MYSQL_PASSWORD \
     -e MYSQL_PORT \
     -e SQLALCHEMY_DATABASE_URI \
