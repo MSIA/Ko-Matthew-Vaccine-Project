@@ -19,7 +19,7 @@ sb_create = subparsers.add_parser("create_db", description="Create database")
 sb_ingest = subparsers.add_parser("ingest", description="Add data to s3 bucket")
 sb_ingest.add_argument('--s3path',default='s3://2021-msia423-ko-matthew/raw/pulse2021.csv',
                     help="If used, will load data to specified path")
-sb_ingest.add_argument('--local_path', default='data/raw/pulse2021_puf_27.csv',
+sb_ingest.add_argument('--local_path', default=config.RAW_CSV_LOCATION,
                     help="Where to load data to in S3")
 
 args = parser.parse_args()

@@ -11,7 +11,8 @@ logger = logging.getLogger(__name__)
 Base = declarative_base()
 
 class vSentiment(Base):
-    """Create a table used to store model parameters and features used to predict reasons why a person may not get the COVID-19 vaccine"""
+    """Create a table used to store model parameters and features
+        used to predict reasons why a person may not get the COVID-19 vaccine"""
     __tablename__ = 'vaccine_model'
     id = Column(Integer, primary_key=True)
     female = Column(Float, unique=False, nullable=True)
@@ -27,14 +28,13 @@ class vSentiment(Base):
         return '<vSentiment %r>' % self.id
 
 def create_db():
+    """Create the database and tables either locally or in AWS RDS"""
     if os.environ.get('MYSQL_HOST') is None:
         logger.info("Database location: Local")
     else:
         logger.info("Database location: AWS RDS")
     # set up mysql connection
     engine = sql.create_engine(SQLALCHEMY_DATABASE_URI)
-
     # create the vaccine_model table
     Base.metadata.create_all(engine)
-
     logger.info("Vaccine Sentiment Database created successfully!")

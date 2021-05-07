@@ -12,7 +12,6 @@
   * [2. Build the image](#2-build-the-image)
   * [3. Push data to S3](#3-push-data-to-s3)
   * [4. Initialize the database](#4-initialize-the-database)
-  * [Workaround for potential Docker problem for Windows.](#workaround-for-potential-docker-problem-for-windows)
 
 <!-- tocstop -->
 
@@ -31,7 +30,7 @@ The business metric will be tracked by the number of users. If the number of use
 
 ```
 ├── README.md                         <- You are here
-├── api
+├── app
 │   ├── static/                       <- CSS, JS files that remain static
 │   ├── templates/                    <- HTML (or other code) that is templated and changes based on a set of inputs
 │   ├── boot.sh                       <- Start up script for launching app in Docker container.
@@ -41,7 +40,8 @@ The business metric will be tracked by the number of users. If the number of use
 │   ├── local/                        <- Directory for keeping environment variables and other local configurations that *do not sync** to Github
 │   ├── logging/                      <- Configuration of python loggers
 │   ├── flaskconfig.py                <- Configurations for Flask API
-│
+│   ├── config.py                     <- Configurations for general source data information
+│   
 ├── data                              <- Folder that contains data used or generated. Only the external/ and sample/ subdirectories are tracked by git.
 │   ├── external/                     <- External data sources, usually reference data,  will be synced with git
 │   ├── sample/                       <- Sample data used for code development and testing, will be synced with git
@@ -58,7 +58,6 @@ The business metric will be tracked by the number of users. If the number of use
 │   ├── archive/                      <- Develop notebooks no longer being used.
 │   ├── deliver/                      <- Notebooks shared with others / in final state
 │   ├── develop/                      <- Current notebooks being used in development.
-│   ├── template.ipynb                <- Template notebook for analysis with useful imports, helper functions, and SQLAlchemy setup.
 │
 ├── reference/                        <- Any reference material relevant to the project
 │
@@ -107,7 +106,7 @@ To build the image for ingesting the data and setting up the database, run this 
  docker build -f app/Dockerfile -t vaccine_project .
 ```
 
-This command builds the Docker image for ingesting and setting up the databse, with the tag `project`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
+This command builds the Docker image for ingesting and setting up the database, with the tag `project`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
 
 ### 3. Push data to S3
 
@@ -115,12 +114,10 @@ To push data to S3, run from this directory:
 
 ```bash
 docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
-  --mount type=bind,source="$(pwd)/data/",target=/app/data/ \
-  vaccine_project run.py ingest --s3path='s3://your-bucket/location-of-file-in-s3'
+  vaccine_project run.py ingest --local_path={your_local_path} --s3path={your_s3_path}
 ```
 
-This command runs the `run.py` command in the `project` image to download the data from the source website, unzip it, and push the data into S3.
-
+`--local_path` and `--s3path` are required arguments. `--local_path` is the location where the raw data was downloaded and unzipped from the source location, set by default and configurable in `config.py`. This command runs the `run.py` command in the `vaccine_project` image to download the data from the source website, unzip it, and push the data into S3.
 
 ### 4. Initialize the database
 
@@ -135,7 +132,6 @@ docker run \
     -e MYSQL_PASSWORD \
     -e MYSQL_PORT \
     -e SQLALCHEMY_DATABASE_URI \
-    --mount type=bind,source="$(pwd)/data/",target=/app/data/ \
      vaccine_project run.py create_db
 ```
 
