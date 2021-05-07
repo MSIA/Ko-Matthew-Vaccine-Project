@@ -6,4 +6,3 @@ DATA_FILENAME="pulse2021_puf_27.csv"
 RAW_ZIP_LOCATION = path.join(PROJECT_HOME,'data/raw/pulse2021.zip')
 RAW_LOCATION = path.join(PROJECT_HOME,'data/raw/')
 RAW_CSV_LOCATION = path.join(PROJECT_HOME,'data/raw/pulse2021_puf_27.csv')
-S3_BUCKET = "raw/pulse2021.csv"
