@@ -37,4 +37,4 @@ def create_db():
     engine = sql.create_engine(SQLALCHEMY_DATABASE_URI)
     # create the vaccine_model table
     Base.metadata.create_all(engine)
-    logger.info("Vaccine Sentiment Database created successfully at: %s",SQLALCHEMY_DATABASE_URI)
+    logger.info("Vaccine Sentiment Database created successfully.")
