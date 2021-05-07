@@ -1,6 +1,7 @@
+import logging.config
+
 import argparse
 import os
-import logging.config
 from config import config
 
 from src.ingest import upload_s3, get_zip, unzip

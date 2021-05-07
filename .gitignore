@@ -8,7 +8,6 @@ __pycache__/
 *.jar
 *.db
 .ipynb_checkpoints/
-notebooks/*
 
 data/raw/*
 config/local/*
