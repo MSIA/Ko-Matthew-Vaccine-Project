@@ -95,10 +95,10 @@ export MYSQL_USER="MY_USERNAME"
 export MYSQL_PASSWORD="MY_PASSWORD"
 export MYSQL_HOST="MY_HOST"
 export MYSQL_PORT="MY_PORT"
-export MYSQL_DATABASE="MY_DATABASE"
+export DATABASE_NAME="MY_DATABASE"
 ```
 
-The CHANGEME.env file in the `config` folder is provided for the user to edit and use for setting up the required environment variables as well. The user can then pass the required environment variables through subsequent docker run commands using -e or --env-file arguments. The CHANGEME.env file is not required if the user already has the required environment variables currently defined. If the MYSQL_* variables are not set, the user can set the database to be built locally rather than through AWS RDS.
+If the MYSQL_* variables are not set, the database will be built locally rather than through AWS RDS.
 
 ### 2. Build the image
 
@@ -121,7 +121,7 @@ docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
   vaccine_project run.py ingest --s3path {your_s3_path}
 ```
 
-`--s3path` is a required argument. The default `--s3path` is `'s3://2021-msia423-ko-matthew/raw/pulse2021.csv'`. This command runs the `run.py` command in the `vaccine_project` image to download the data from the source website, unzip it, and push the data into S3. The location the file downloded from the source url is configurable and located in `config/config.py`. Although configurable, it is not recommended that these locations change as errors may occur. 
+`--s3path` is a required argument. The default `--s3path` is `'s3://2021-msia423-ko-matthew/raw/pulse2021.csv'`. This command runs the `run.py` command in the `vaccine_project` image to download the data from the source website, unzip it, and push the data into S3. The location the file downloded from the source url is configurable and located in `config/config.py`. Although configurable, it is not recommended that these locations change as errors may occur.
 
 ### 4. Initialize the database
 
@@ -132,7 +132,7 @@ To create the database either in RDS or locally run from this directory:
 docker run \
     -e MYSQL_HOST \
     -e MYSQL_USER \
-    -e MYSQL_DATABASE \
+    -e DATABASE_NAME \
     -e MYSQL_PASSWORD \
     -e MYSQL_PORT \
     -e SQLALCHEMY_DATABASE_URI \
