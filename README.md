@@ -121,7 +121,7 @@ docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
   vaccine_project run.py ingest --s3path {your_s3_path}
 ```
 
---s3path` is a required argument. This command runs the `run.py` command in the `vaccine_project` image to download the data from the source website, unzip it, and push the data into S3. The location the file downloded from the source url is configurable and located in `config/config.py`. Although configurable, it is not recommended that these locations change as errors may occur. 
+`--s3path` is a required argument. This command runs the `run.py` command in the `vaccine_project` image to download the data from the source website, unzip it, and push the data into S3. The location the file downloded from the source url is configurable and located in `config/config.py`. Although configurable, it is not recommended that these locations change as errors may occur. 
 
 ### 4. Initialize the database
 
