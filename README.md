@@ -114,7 +114,9 @@ This command builds the Docker image for ingesting and setting up the databse, w
 To push data to S3, run from this directory:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY vaccine_project run.py ingest --s3path='s3://your-bucket/location-of-file-in-s3'
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
+  --mount type=bind,source="$(pwd)/data/",target=/app/data/ \
+  vaccine_project run.py ingest --s3path='s3://your-bucket/location-of-file-in-s3'
 ```
 
 This command runs the `run.py` command in the `project` image to download the data from the source website, unzip it, and push the data into S3.
@@ -141,4 +143,4 @@ If the MYSQL_HOST environment variable is set, the above command will attempt to
 
 Without a MYSQL_HOST environment variable set, the above command creates a local database located at `sqlite:///data/vSentiment.db`. If you would like to set the location of the database, please set the SQLALCHEMY_DATABASE_URI environment variable to the appropriate connection string before running the above command. Otherwise, it will be automatically generated and set to `sqlite:///data/vSentiment.db` and pass it into the docker run command above instead of / in addition to the environment variables listed above.
 
-For midpoint PR: The table name created is called "vaccine_model" in both RDS and the local database. For chloe and fausto's convenience, will be removed later. I was able to see the table in RDS and use the local vSentiment.db using pandas.read_sql and sqlalchemy. 
+For midpoint PR: The table name created is called "vaccine_model" in both RDS and the local database. For chloe and fausto's convenience, will be removed later. I was able to see the table in RDS and use the local vSentiment.db using pandas.read_sql and sqlalchemy.

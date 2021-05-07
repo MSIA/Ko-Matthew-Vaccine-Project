@@ -6,9 +6,10 @@ __pycache__/
 .idea/
 *.log
 *.jar
+*.db
 .ipynb_checkpoints/
 notebooks/*
 
-data/*
+data/raw/*
 config/local/*
 !.gitkeep

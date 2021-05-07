@@ -3,7 +3,7 @@ import os
 import logging.config
 from config import config
 
-from src.ingest import upload_s3, parse_s3, get_zip, unzip
+from src.ingest import upload_s3, get_zip, unzip
 from src.createdb import create_db
 
 logging.config.fileConfig('config/logging/local.conf')
