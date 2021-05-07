@@ -84,17 +84,21 @@ flaskconfig.py includes configurations for flask app, including local and RDS MY
 The following environment variables are needed for the application to run in relation to AWS S3 and and RDS services.
 
 For S3 services:
-* AWS_ACCESS_KEY_ID
-* AWS_SECRET_ACCESS_KEY
+```bash
+export AWS_ACCESS_KEY_ID="MY_ACCESS_KEY_ID"
+export AWS_SECRET_ACCESS_KEY="MY_SECRET_ACCESS_KEY"
+```
 
 For RDS services:
-* MYSQL_HOST
-* MYSQL_PORT
-* MYSQL_USER
-* MYSQL_PASSWORD
-* MYSQL_DB
+```bash
+export MYSQL_USER="MY_USERNAME"
+export MYSQL_PASSWORD="MY_PASSWORD"
+export MYSQL_HOST="MY_HOST"
+export MYSQL_PORT="MY_PORT"
+export MYSQL_DATABASE="MY_DATABASE"
+```
 
-The provided CHANGEME.env file is provided for the user to edit and use for setting up the required environment variables. The user will then pass the required environment variables through subsequent docker run commands using -e or --env-file arguments. The CHANGEME.env file is not required if the user already has these environment variables currently defined. If the MYSQL_* variables are not set, the user can set the database to be built locally rather than through AWS RDS.
+The provided CHANGEME.env file is provided for the user to edit and use for setting up the required environment variables as well. The user can then pass the required environment variables through subsequent docker run commands using -e or --env-file arguments. The CHANGEME.env file is not required if the user already has the required environment variables currently defined. If the MYSQL_* variables are not set, the user can set the database to be built locally rather than through AWS RDS.
 
 ### 2. Build the image
 
