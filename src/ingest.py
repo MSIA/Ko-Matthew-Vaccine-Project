@@ -3,7 +3,6 @@ import logging.config
 import os
 import re
 import requests
-import argparse
 import boto3
 import botocore
 from botocore.exceptions import ClientError

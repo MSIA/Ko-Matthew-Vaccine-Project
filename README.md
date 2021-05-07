@@ -106,7 +106,7 @@ To build the image for ingesting the data and setting up the database, run this 
  docker build -f app/Dockerfile -t vaccine_project .
 ```
 
-This command builds the Docker image for ingesting and setting up the database, with the tag `project`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
+This command builds the Docker image for ingesting and setting up the database, with the tag `vaccine_project`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
 
 ### 3. Push data to S3
 
