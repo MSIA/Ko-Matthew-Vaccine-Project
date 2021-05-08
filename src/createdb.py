@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 Base = declarative_base()
 
-class vSentiment(Base):
+class VaccineSentiment(Base):
     """Create a table used to store model parameters for application use"""
     __tablename__ = 'vaccine_model'
     id = Column(Integer, primary_key=True)
@@ -24,7 +24,7 @@ class vSentiment(Base):
     age = Column(Float, unique=False, nullable=True)
 
     def __repr__(self):
-        return '<vSentiment %r>' % self.id
+        return '<VaccineSentiment %r>' % self.id
 
 def create_db():
     """Create the database and tables either locally or in AWS RDS"""
