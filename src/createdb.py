@@ -1,6 +1,6 @@
 import logging.config
-
 import os
+
 import sqlalchemy as sql
 from config.flaskconfig import SQLALCHEMY_DATABASE_URI
 from sqlalchemy.ext.declarative import declarative_base
