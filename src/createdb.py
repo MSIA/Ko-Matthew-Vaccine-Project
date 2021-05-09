@@ -33,7 +33,6 @@ def create_db():
     else:
         logger.info("Database location: AWS RDS")
     # set up mysql connection
-
     engine = sql.create_engine(SQLALCHEMY_DATABASE_URI)
 
     try:
