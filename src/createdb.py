@@ -2,9 +2,9 @@ import logging.config
 import os
 
 import sqlalchemy as sql
-from config.flaskconfig import SQLALCHEMY_DATABASE_URI
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, Float
+from config.flaskconfig import SQLALCHEMY_DATABASE_URI
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,12 @@ def create_db():
     else:
         logger.info("Database location: AWS RDS")
     # set up mysql connection
+
     engine = sql.create_engine(SQLALCHEMY_DATABASE_URI)
-    # create the vaccine_model table
-    Base.metadata.create_all(engine)
-    logger.info("Vaccine Sentiment Database created successfully.")
+
+    try:
+        Base.metadata.create_all(engine)
+    except sql.exc.OperationalError:
+        logger.warning("Please connect to Northwestern VPN or campus WiFi")
+    else:
+        logger.info("Vaccine Sentiment Database created successfully.")
