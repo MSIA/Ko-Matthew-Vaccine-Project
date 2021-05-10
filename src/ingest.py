@@ -21,11 +21,15 @@ def get_zip(url,file_name):
     '''
     try:
         with open(file_name, "wb") as f:
-            r = requests.get(url, stream=True)
+            r = requests.get(url, stream=True,timeout=30)
             f.write(r.content)
         logger.info("Zip file successfully downloaded from source, placed in %s",file_name)
-    except:
-        logger.error("File was unable to be downloaded from source location")
+    except requests.ConnectionError:
+        logger.error("Could not download: Connection error")
+    except requests.Timeout:
+        logger.error("Could not download: Timeout error")
+    except Exception:
+        logger.error("General: File was unable to be downloaded from source location")
 
 def unzip(source_path, destination_path, data_filename):
     '''Unzips a zip file

@@ -30,14 +30,18 @@ def create_db():
     """Create the database and tables either locally or in AWS RDS"""
     if os.environ.get('MYSQL_HOST') is None:
         logger.info("Database location: Local")
+        logger.debug("Set MYSQL_HOST variable for AWS RDS instead of local")
     else:
         logger.info("Database location: AWS RDS")
+        logger.debug("Remove MYSQL_HOST variable for local instead of AWS")
     # set up mysql connection
     engine = sql.create_engine(SQLALCHEMY_DATABASE_URI)
 
     try:
         Base.metadata.create_all(engine)
     except sql.exc.OperationalError:
-        logger.warning("Please connect to Northwestern VPN or campus WiFi")
+        logger.error("Unable to create database")
+        logger.warning("Please connect to Northwestern VPN or campus WiFi,\
+                        or remove MY_SQL env variable for local location")
     else:
         logger.info("Vaccine Sentiment Database created successfully.")
