@@ -26,13 +26,13 @@ def get_zip(url,file_name):
         with open(file_name, "wb") as f:
             r = requests.get(url, stream=True,timeout=30)
             f.write(r.content)
-        logger.info("Zip file successfully downloaded from source, placed in %s",file_name)
+        logger.info('Zip file successfully downloaded from source, placed in %s',file_name)
     except requests.ConnectionError:
-        logger.error("Could not download: Connection error")
+        logger.error('Could not download: Connection error')
     except requests.Timeout:
-        logger.error("Could not download: Timeout error")
+        logger.error('Could not download: Timeout error')
     except Exception:
-        logger.error("General: File was unable to be downloaded from source location")
+        logger.error('General: File was unable to be downloaded from source location')
 
 def unzip(source_path, destination_path, data_filename):
     '''Unzips a zip file
@@ -46,9 +46,9 @@ def unzip(source_path, destination_path, data_filename):
     try:
         with ZipFile(source_path, 'r') as zipObj:
             zipObj.extract(data_filename,destination_path)
-        logger.info("File successfully unzipped and extracted, located at %s",destination_path)
+        logger.info('File successfully unzipped and extracted, located at %s',destination_path)
     except:
-        logger.error("File %s was not able to be unzipped", source_path)
+        logger.error('File %s was not able to be unzipped', source_path)
 
 def parse_s3(s3path):
     '''Parses string to extract bucket name and s3 path

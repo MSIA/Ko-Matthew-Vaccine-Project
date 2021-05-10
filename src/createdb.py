@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 Base = declarative_base()
 
 class VaccineSentiment(Base):
-    """Create a table used to store model parameters for application use"""
+    '''Create a table used to store model parameters for application use'''
     __tablename__ = 'vaccine_model'
     id = Column(Integer, primary_key=True)
     female = Column(Float, unique=False, nullable=True)
@@ -27,21 +27,21 @@ class VaccineSentiment(Base):
         return '<VaccineSentiment %r>' % self.id
 
 def create_db():
-    """Create the database and tables either locally or in AWS RDS"""
+    '''Create the database and tables either locally or in AWS RDS'''
     if os.environ.get('MYSQL_HOST') is None:
-        logger.info("Database location: Local")
-        logger.debug("Set MYSQL_HOST variable for AWS RDS instead of local")
+        logger.info('Database location: Local')
+        logger.debug('Set MYSQL_HOST variable for AWS RDS instead of local')
     else:
-        logger.info("Database location: AWS RDS")
-        logger.debug("Remove MYSQL_HOST variable for local instead of AWS")
+        logger.info('Database location: AWS RDS')
+        logger.debug('Remove MYSQL_HOST variable for local instead of AWS')
     # set up mysql connection
     engine = sql.create_engine(SQLALCHEMY_DATABASE_URI)
 
     try:
         Base.metadata.create_all(engine)
     except sql.exc.OperationalError:
-        logger.error("Unable to create database")
-        logger.warning("Please connect to Northwestern VPN or campus WiFi,\
-                        or remove MY_SQL env variable for local location")
+        logger.error('Unable to create database')
+        logger.warning('Please connect to Northwestern VPN or campus WiFi,\
+                        or remove MY_SQL env variable for local location')
     else:
-        logger.info("Vaccine Sentiment Database created successfully.")
+        logger.info('Vaccine Sentiment Database created successfully.')
