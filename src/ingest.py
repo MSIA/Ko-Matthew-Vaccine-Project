@@ -10,6 +10,9 @@ from zipfile import ZipFile
 
 logger = logging.getLogger(__name__)
 
+aws_id = os.environ.get('AWS_ACCESS_KEY_ID') #AWS ID as environment variable
+aws_key = os.environ.get('AWS_SECRET_ACCESS_KEY') #AWS Key as environment variable
+
 def get_zip(url,file_name):
     '''Downloads a file and writes it to current directory
 
@@ -72,8 +75,8 @@ def upload_s3(local_path, s3path):
     Returns:
         None
     '''
-    session = boto3.Session(aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-                            aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
+    session = boto3.Session(aws_access_key_id=aws_id,
+                            aws_secret_access_key=aws_key)
     client = session.client('s3')
     s3bucket, s3_just_path = parse_s3(s3path)
 

@@ -6,6 +6,12 @@ from config import config
 from src.ingest import upload_s3, get_zip, unzip
 from src.createdb import create_db
 
+source_url = config.SOURCE_URL #url cotaining data for application
+zip_loc = config.RAW_ZIP_LOCATION #Path to zip file downloaded
+raw_directory = config.RAW_LOCATION #Directory of zip file, for unzip function
+file_name = config.DATA_FILENAME #File to extract within zip
+csv_loc = config.RAW_CSV_LOCATION #Path to csv that was extracted
+
 logging.config.fileConfig('config/logging/local.conf')
 
 # Add parsers for both creating a database and uploading source data to s3 bucket
@@ -27,8 +33,8 @@ if __name__ == '__main__':
     if sp_used == 'create_db':
         create_db()
     elif sp_used == 'ingest':
-        get_zip(config.SOURCE_URL, config.RAW_ZIP_LOCATION)
-        unzip(config.RAW_ZIP_LOCATION, config.RAW_LOCATION, config.DATA_FILENAME)
-        upload_s3(config.RAW_CSV_LOCATION, args.s3path)
+        get_zip(source_url, zip_loc)
+        unzip(zip_loc, raw_directory, file_name)
+        upload_s3(csv_loc, args.s3path)
     else:
         parser.print_help()
