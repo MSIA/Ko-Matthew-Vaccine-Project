@@ -75,11 +75,10 @@ The business metric will be tracked by the number of users. If the number of use
 ### 1. Set up environment variables
 
 Configuration files for running web app are located in the `config/` folder.
-CHANGEME.env needs to be renamed to config.env and it includes a place to store S3 Access Keys and RDS Host,User,Password,Port,and db information.\
-config.py includes variables to configure local data storage, as well as S3 bucket information\
+`config.py` includes variables to configure local data storage, as well as S3 bucket information\
 flaskconfig.py includes configurations for flask app, including local and RDS MYSQL databases.
 
-#### 1.1: How to set up environment variables required\
+#### 1.1: How to set up environment variables required
 
 The following environment variables are needed for the application to run in relation to AWS S3 and and RDS services.
 
