@@ -23,8 +23,8 @@ sb_create = subparsers.add_parser('create_db', description='Create database')
 
 # Sub-parser for ingesting new data into s3 bucket
 sb_ingest = subparsers.add_parser('ingest', description='Add data to s3 bucket')
-sb_ingest.add_argument('--s3path',default='s3://2021-msia423-ko-matthew/raw/pulse2021.csv',
-                       help='If used, will load data to specified path')
+sb_ingest.add_argument('--s3path', required=True,
+                       help='Will load data to specified path')
 
 args = parser.parse_args()
 sp_used = args.subparser_name
