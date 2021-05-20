@@ -39,6 +39,7 @@ def create_db():
 
     try:
         Base.metadata.create_all(engine)
+        logger.info("Database created from %s",  SQLALCHEMY_DATABASE_URI)
     except sql.exc.OperationalError:
         logger.error('Unable to create database')
         logger.warning('Please connect to Northwestern VPN or campus WiFi,\
