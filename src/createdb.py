@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 Base = declarative_base()
 
+
 class VaccineSentiment(Base):
     '''Create a table used to store model parameters for application use'''
     __tablename__ = 'vaccine_model'
@@ -25,6 +26,7 @@ class VaccineSentiment(Base):
 
     def __repr__(self):
         return '<VaccineSentiment %r>' % self.id
+
 
 def create_db():
     '''Create the database and tables either locally or in AWS RDS'''

@@ -8,11 +8,11 @@ from src.createdb import create_db
 
 logging.config.fileConfig('config/logging/local.conf')
 
-source_url = config.SOURCE_URL #url cotaining data for application
-zip_loc = config.RAW_ZIP_LOCATION #Path to zip file downloaded
-raw_directory = config.RAW_LOCATION #Directory of zip file, for unzip function
-file_name = config.DATA_FILENAME #File to extract within zip
-csv_loc = config.RAW_CSV_LOCATION #Path to csv that was extracted
+source_url = config.SOURCE_URL  # url cotaining data for application
+zip_loc = config.RAW_ZIP_LOCATION  # ath to zip file downloaded
+raw_directory = config.RAW_LOCATION  # Directory of zip file, for unzip function
+file_name = config.DATA_FILENAME  # File to extract within zip
+csv_loc = config.RAW_CSV_LOCATION  # Path to csv that was extracted
 
 # Add parsers for both creating a database and uploading source data to s3 bucket
 parser = argparse.ArgumentParser(description='Create database or upload data to s3')

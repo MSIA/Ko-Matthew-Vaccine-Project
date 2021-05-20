@@ -10,8 +10,9 @@ from zipfile import ZipFile
 
 logger = logging.getLogger(__name__)
 
-aws_id = os.environ.get('AWS_ACCESS_KEY_ID') #AWS ID as environment variable
-aws_key = os.environ.get('AWS_SECRET_ACCESS_KEY') #AWS Key as environment variable
+aws_id = os.environ.get('AWS_ACCESS_KEY_ID')  # AWS ID as environment variable
+aws_key = os.environ.get('AWS_SECRET_ACCESS_KEY')  # AWS Key as environment variable
+
 
 def get_zip(url,file_name):
     '''Downloads a file and writes it to current directory
@@ -34,6 +35,7 @@ def get_zip(url,file_name):
     except Exception:
         logger.error('General: File was unable to be downloaded from source location')
 
+
 def unzip(source_path, destination_path, data_filename):
     '''Unzips a zip file
     Args:
@@ -49,6 +51,7 @@ def unzip(source_path, destination_path, data_filename):
         logger.info('File successfully unzipped and extracted, located at %s',destination_path)
     except:
         logger.error('File %s was not able to be unzipped', source_path)
+
 
 def parse_s3(s3path):
     '''Parses string to extract bucket name and s3 path
