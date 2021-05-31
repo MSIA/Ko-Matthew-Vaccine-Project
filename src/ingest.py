@@ -91,3 +91,21 @@ def upload_s3(local_path, s3path):
         logger.error("Please provide a valid S3 bucket name.")
     else:
         logger.info('Data successfully uploaded from %s to %s', local_path, s3path)
+
+
+def download_s3(local_path, s3path, sep=','):
+    '''
+    Args:
+        local_path (str): the filepath location of file that will be downloaded to
+        s3path (str): the path where the file will be located on s3
+        sep (str): separator for downloaded file
+    Returns:
+        None
+    '''
+    try:
+        df = pd.read_csv(s3path, sep=sep)
+    except botocore.exceptions.NoCredentialsError:
+        logger.error('Please provide AWS credentials via AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env variables.')
+    else:
+        df.to_csv(local_path, sep=sep)
+        logger.info('Data uploaded from %s to %s', local_path, s3path)
