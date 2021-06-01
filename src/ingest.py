@@ -5,6 +5,7 @@ import re
 import requests
 import boto3
 import botocore
+import pandas as pd
 from botocore.exceptions import ClientError
 from zipfile import ZipFile
 
@@ -93,7 +94,7 @@ def upload_s3(local_path, s3path):
         logger.info('Data successfully uploaded from %s to %s', local_path, s3path)
 
 
-def download_s3(local_path, s3path, sep=','):
+def download_s3(local_path, s3path, sep):
     '''
     Args:
         local_path (str): the filepath location of file that will be downloaded to
@@ -107,5 +108,5 @@ def download_s3(local_path, s3path, sep=','):
     except botocore.exceptions.NoCredentialsError:
         logger.error('Please provide AWS credentials via AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY env variables.')
     else:
-        df.to_csv(local_path, sep=sep)
-        logger.info('Data uploaded from %s to %s', local_path, s3path)
+        df.to_csv(local_path, sep=sep, index=False)
+        logger.info('Data downloaded from %s to %s', s3path, local_path)

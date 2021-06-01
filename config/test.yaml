@@ -1,0 +1,47 @@
+clean:
+  clean:
+    columns:
+      - EGENDER
+      - RRACE
+      - EEDUC
+      - MS
+      - KINDWORK
+      - REGION
+      - TBIRTH_YEAR
+      - GETVACC
+      - WHYNOT1
+      - WHYNOT2
+      - WHYNOT3
+      - WHYNOT4
+      - WHYNOT5
+      - WHYNOT6
+      - WHYNOT7
+      - WHYNOT8
+      - WHYNOT9
+      - WHYNOT10
+      - WHYNOT11
+    response: GETVACC
+    threshold: 2
+    null_vals:
+      - -88
+      - -99
+    other: 0
+    db_col:
+      - EGENDER
+      - RRACE
+      - EEDUC
+      - MS
+      - KINDWORK
+      - REGION
+      - TBIRTH_YEAR
+      - WHYNOT1
+      - WHYNOT2
+      - WHYNOT3
+      - WHYNOT4
+      - WHYNOT5
+      - WHYNOT6
+      - WHYNOT7
+      - WHYNOT8
+      - WHYNOT9
+      - WHYNOT10
+      - WHYNOT11
