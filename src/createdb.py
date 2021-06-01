@@ -71,7 +71,7 @@ def add_df(df):
     # set up mysql connection
     engine = sql.create_engine(SQLALCHEMY_DATABASE_URI)
 
-    df.to_sql('vaccine_clean', engine, if_exists='append', index=False)
+    df.to_sql('vaccine_clean', engine, if_exists='replace', index=False)
     # try:
     #
     # except:
