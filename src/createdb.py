@@ -71,8 +71,9 @@ def add_df(df):
     # set up mysql connection
     engine = sql.create_engine(SQLALCHEMY_DATABASE_URI)
 
-    df.to_sql('vaccine_clean', engine, if_exists='replace', index=False)
-    # try:
-    #
-    # except:
-    #     logger.error("Error adding clean data to database")
+    try:
+        df.to_sql('vaccine_clean', engine, if_exists='replace', index=False)
+    except sql.exc.OperationalError as e:
+        logger.error("Error with sql functionality: ", e)
+    except:
+        logger.error("Uncaught error adding clean data to database")
