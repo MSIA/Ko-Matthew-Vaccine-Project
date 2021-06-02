@@ -71,7 +71,7 @@ def parse_s3(s3path):
     return s3bucket, s3path
 
 
-def upload_s3(local_path, s3path):
+def upload_s3(s3path, local_path):
     '''Uploads file to s3 Bucket
     Args:
         local_path (str): the filepath location of file that will be uploaded
@@ -94,7 +94,7 @@ def upload_s3(local_path, s3path):
         logger.info('Data successfully uploaded from %s to %s', local_path, s3path)
 
 
-def download_s3(local_path, s3path, sep):
+def download_s3(s3path, local_path, sep):
     '''
     Args:
         local_path (str): the filepath location of file that will be downloaded to

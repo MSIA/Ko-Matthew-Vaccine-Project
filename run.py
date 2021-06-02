@@ -48,12 +48,12 @@ if __name__ == '__main__':
     if sp_used == 'create_db':
         create_db()
     elif sp_used == 'ingest':
-        get_zip(source_url, zip_loc)
-        unzip(zip_loc, raw_directory, file_name)
-        upload_s3(csv_loc, args.s3path)
+        get_zip(**y_conf['ingest']['get_zip'])
+        unzip(**y_conf['ingest']['unzip'])
+        upload_s3(args.s3path, y_conf['ingest']['upload_s3']['local_path'])
     elif sp_used == 'clean':
-        download_s3(csv_loc, args.s3path, ',')
-        output = clean(csv_loc, **y_conf['clean']['clean'])
+        download_s3(args.s3path, **y_conf['ingest']['download_s3'])
+        output = clean(**y_conf['clean']['clean'])
         add_df(output)
     else:
         parser.print_help()

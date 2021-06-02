@@ -61,7 +61,7 @@ def create_db():
 
 
 def add_df(df):
-
+    '''Adds clean dataframe to database either locally or in AWS RDS'''
     if os.environ.get('MYSQL_HOST') is None:
         logger.info('Database location: Local')
         logger.debug('Set MYSQL_HOST variable for AWS RDS instead of local')
@@ -73,7 +73,9 @@ def add_df(df):
 
     try:
         df.to_sql('vaccine_clean', engine, if_exists='replace', index=False)
+        logger.info('Clean data added to database')
     except sql.exc.OperationalError as e:
+        logger.debug('Make sure you are connected to the VPN')
         logger.error("Error with sql functionality: ", e)
     except:
         logger.error("Uncaught error adding clean data to database")
