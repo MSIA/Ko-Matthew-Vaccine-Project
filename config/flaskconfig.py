@@ -1,4 +1,5 @@
 import os
+
 DEBUG = True
 LOGGING_CONFIG = 'config/logging/local.conf'
 PORT = 5000
