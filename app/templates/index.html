@@ -20,76 +20,82 @@
     </p>
   </div>
 
+
+
   <div class="break">
     <h2>find out which conversation to prepare for</h2>
   </div>
 
   <div class="app">
-    <input type="radio" name="gender" id="male" value="1">
-    <label for="male">Male</label>
-    <input type="radio" name="gender" id="female" value="2">
-    <label for="female">Female</label>
-    <br>
-    <input type="radio" name="race" id="asian" value="3">
-    <label for="asian">Asian, alone</label>
-    <input type="radio" name="race" id="black" value="2">
-    <label for="black">Black, alone</label>
-    <input type="radio" name="race" id="white" value="1">
-    <label for="white">White, alone</label>
-    <input type="radio" name="race" id="other" value="2">
-    <label for="other">Other, or combination</label>
-    <br>
-    <input type="radio" name="education" id="one" value="1">
-    <label for="one">Less than High School</label>
-    <input type="radio" name="education" id="two" value="2">
-    <label for="two">Some high school</label>
-    <input type="radio" name="education" id="three" value="3">
-    <label for="three">High school or equivalent (GED)</label>
-    <input type="radio" name="education" id="four" value="4">
-    <label for="four">Some college</label>
-    <input type="radio" name="education" id="five" value="5">
-    <label for="five">Associate's degree</label>
-    <input type="radio" name="education" id="six" value="6">
-    <label for="other">Bachelor's degree</label>
-    <input type="radio" name="education" id="seven" value="7">
-    <label for="seven">Graduate, professional, doctorate</label>
-    <br>
-    <input type="radio" name="ms" id="one" value="1">
-    <label for="one">Now married</label>
-    <input type="radio" name="ms" id="two" value="2">
-    <label for="two">Widowed</label>
-    <input type="radio" name="ms" id="three" value="3">
-    <label for="three">Divorced</label>
-    <input type="radio" name="ms" id="four" value="4">
-    <label for="four">Separated</label>
-    <input type="radio" name="ms" id="five" value="5">
-    <label for="five">Never married</label>
-    <input type="radio" name="ms" id="six" value="0">
-    <label for="six">Don't know</label>
-    <br>
-    <input type="radio" name="work" id="one" value="1">
-    <label for="one">Government</label>
-    <input type="radio" name="work" id="two" value="2">
-    <label for="two">Private Company</label>
-    <input type="radio" name="work" id="three" value="3">
-    <label for="three">Non-profit</label>
-    <input type="radio" name="work" id="four" value="4">
-    <label for="four">Self-employed</label>
-    <input type="radio" name="work" id="five" value="5">
-    <label for="five">Family business</label>
-    <input type="radio" name="work" id="six" value="0">
-    <label for="six">Don't know</label>
-    <br>
-    <input type="radio" name="region" id="one" value="1">
-    <label for="one">Northeast</label>
-    <input type="radio" name="region" id="two" value="2">
-    <label for="two">South</label>
-    <input type="radio" name="region" id="three" value="3">
-    <label for="three">Midwest</label>
-    <input type="radio" name="region" id="four" value="4">
-    <label for="four">West</label>
-    <br>
-    <input type="text" name="year" value="">
+    <form action="{{ url_for('show_temp') }}" method=post class=response>
+      <input type="radio" name="gender" id="man" value="1">
+      <label for="male">Man</label>
+      <input type="radio" name="gender" id="woman" value="2">
+      <label for="female">Woman</label>
+      <br>
+      <input type="radio" name="race" id="asian" value="3">
+      <label for="asian">Asian, alone</label>
+      <input type="radio" name="race" id="black" value="2">
+      <label for="black">Black, alone</label>
+      <input type="radio" name="race" id="white" value="1">
+      <label for="white">White, alone</label>
+      <input type="radio" name="race" id="other" value="2">
+      <label for="other">Other, or combination</label>
+      <br>
+      <input type="radio" name="education" id="one" value="1">
+      <label for="one">Less than High School</label>
+      <input type="radio" name="education" id="two" value="2">
+      <label for="two">Some high school</label>
+      <input type="radio" name="education" id="three" value="3">
+      <label for="three">High school or equivalent (GED)</label>
+      <input type="radio" name="education" id="four" value="4">
+      <label for="four">Some college</label>
+      <input type="radio" name="education" id="five" value="5">
+      <label for="five">Associate's degree</label>
+      <input type="radio" name="education" id="six" value="6">
+      <label for="other">Bachelor's degree</label>
+      <input type="radio" name="education" id="seven" value="7">
+      <label for="seven">Graduate, professional, doctorate</label>
+      <br>
+      <input type="radio" name="ms" id="one" value="1">
+      <label for="one">Now married</label>
+      <input type="radio" name="ms" id="two" value="2">
+      <label for="two">Widowed</label>
+      <input type="radio" name="ms" id="three" value="3">
+      <label for="three">Divorced</label>
+      <input type="radio" name="ms" id="four" value="4">
+      <label for="four">Separated</label>
+      <input type="radio" name="ms" id="five" value="5">
+      <label for="five">Never married</label>
+      <input type="radio" name="ms" id="six" value="0">
+      <label for="six">Don't know</label>
+      <br>
+      <input type="radio" name="work" id="one" value="1">
+      <label for="one">Government</label>
+      <input type="radio" name="work" id="two" value="2">
+      <label for="two">Private Company</label>
+      <input type="radio" name="work" id="three" value="3">
+      <label for="three">Non-profit</label>
+      <input type="radio" name="work" id="four" value="4">
+      <label for="four">Self-employed</label>
+      <input type="radio" name="work" id="five" value="5">
+      <label for="five">Family business</label>
+      <input type="radio" name="work" id="six" value="0">
+      <label for="six">Don't know</label>
+      <br>
+      <input type="radio" name="region" id="one" value="1">
+      <label for="one">Northeast</label>
+      <input type="radio" name="region" id="two" value="2">
+      <label for="two">South</label>
+      <input type="radio" name="region" id="three" value="3">
+      <label for="three">Midwest</label>
+      <input type="radio" name="region" id="four" value="4">
+      <label for="four">West</label>
+      <br>
+      <input type="text" name="year" value="">
+      <input type=submit value=Calculate>
+    </form>
+
   </div>
 
     <!-- <table>
