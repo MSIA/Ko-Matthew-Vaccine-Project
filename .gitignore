@@ -7,8 +7,11 @@ __pycache__/
 *.log
 *.jar
 *.db
+*.pkl
+*.csv
 .ipynb_checkpoints/
 
+!data/additional/*
 config/local/*
 !.gitkeep
 copilot/

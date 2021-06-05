@@ -1,5 +1,12 @@
+model:
+  model_path: models/model.pkl
+  encoder_path: models/encoder.pkl
+
+create_db:
+  local_path: data/additional/external.csv
+
 train:
-  local_path: data/clean.csv
+  local_path: data/clean/clean.csv
   sep: ','
   train:
     category_cols:
@@ -23,9 +30,11 @@ train:
       - WHYNOT11
     year_col:
       - TBIRTH_YEAR
-    results_path: data/model_results.yaml
-    model_path: data/model.sav
-    encoder_path: data/encoder.sav
+    results_path: models/model_results.yaml
+    model_path: models/model.pkl
+    encoder_path: models/encoder.pkl
+    test_size: 0.2
+    random_state: 123
 
 acquire:
   get_zip:
@@ -44,7 +53,7 @@ acquire:
 clean:
   clean:
     local_path: data/raw/pulse2021_puf_27.csv
-    save_path: data/clean.csv
+    save_path: data/clean/clean.csv
     columns:
       - EGENDER
       - RRACE

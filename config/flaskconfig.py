@@ -8,6 +8,8 @@ SQLALCHEMY_TRACK_MODIFICATIONS = True
 HOST = '0.0.0.0'
 SQLALCHEMY_ECHO = False  # If true, SQL for queries made will be printed
 MAX_ROWS_SHOW = 100
+MODEL_PATH = 'models/model.pkl'
+ENCODER_PATH = 'models/encoder.pkl'
 
 # Connection string
 DB_HOST = os.environ.get('MYSQL_HOST')
