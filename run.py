@@ -63,6 +63,7 @@ if __name__ == '__main__':
 
     if sp_used == 'create_db':
         create_db()
+        add_df(y_conf['create_db']['local_path'])
     elif sp_used == 'acquire':
         if args.s3_raw:
             get_zip(**y_conf['acquire']['get_zip'])
