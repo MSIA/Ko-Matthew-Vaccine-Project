@@ -9,4 +9,4 @@ boto3==1.17.49
 botocore==1.20.49
 pandas==1.0.3
 s3fs==2021.5.0
-scikit_learn==0.21.2
+scikit_learn==0.24.0
