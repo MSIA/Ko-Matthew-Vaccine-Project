@@ -1,6 +1,7 @@
 import logging.config
 import os
 
+import pandas as pd
 import sqlalchemy as sql
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
@@ -15,8 +16,10 @@ class VaccineSentiment(Base):
     '''Create a table used to store clean data for application use'''
     __tablename__ = 'vaccine_source'
     id = Column(Integer, primary_key=True)
-    response = Column(Integer, unique=False, nullable=True)
+    output = Column(Integer, unique=False, nullable=True)
     url = Column(String(200), unique=False, nullable=True)
+    response = Column(String(500), unique=False, nullable=True)
+    reason = Column(String(100), unique=False, nullable=True)
 
     def __repr__(self):
         return '<VaccineSentiment %r>' % self.id
@@ -44,7 +47,7 @@ def create_db():
         logger.info('Vaccine Sentiment Database created successfully.')
 
 
-def add_df(df):
+def add_df(local_path):
     '''Adds clean dataframe to database either locally or in AWS RDS'''
     if os.environ.get('MYSQL_HOST') is None:
         logger.info('Database location: Local')
@@ -55,11 +58,12 @@ def add_df(df):
     # set up mysql connection
     engine = sql.create_engine(SQLALCHEMY_DATABASE_URI)
 
+    df = pd.read_csv(local_path)
     try:
-        df.to_sql('vaccine_clean', engine, if_exists='replace', index=False)
-        logger.info('Clean data added to database')
+        df.to_sql('vaccine_response', engine, if_exists='replace', index=False)
+        logger.info('Response data added to database')
     except sql.exc.OperationalError as e:
         logger.debug('Make sure you are connected to the VPN')
         logger.error("Error with sql functionality: ", e)
     except:
-        logger.error("Uncaught error adding clean data to database")
+        logger.error("Uncaught error adding response data to database")
