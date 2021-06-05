@@ -2,6 +2,7 @@ import logging.config
 import os
 
 import pandas as pd
+from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy as sql
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
@@ -14,12 +15,12 @@ Base = declarative_base()
 
 class VaccineSentiment(Base):
     '''Create a table used to store clean data for application use'''
-    __tablename__ = 'vaccine_source'
-    id = Column(Integer, primary_key=True)
+    __tablename__ = 'vaccine_response'
     output = Column(Integer, unique=False, nullable=True)
     url = Column(String(200), unique=False, nullable=True)
     response = Column(String(500), unique=False, nullable=True)
     reason = Column(String(100), unique=False, nullable=True)
+    id = Column(Integer, primary_key=True)
 
     def __repr__(self):
         return '<VaccineSentiment %r>' % self.id
@@ -67,3 +68,17 @@ def add_df(local_path):
         logger.error("Error with sql functionality: ", e)
     except:
         logger.error("Uncaught error adding response data to database")
+
+
+class ResponseManager:
+
+    def __init__(self, app=None, engine_string=None):
+        if app:
+            self.db = SQLAlchemy(app)
+            self.session = self.db.session
+        elif engine_string:
+            engine = sqlalchemy.create_engine(engine_string)
+            Session = sessionmaker(bind=engine)
+            self.session = Session()
+        else:
+            raise ValueError("Need either an engine string or a Flask app to initialize")

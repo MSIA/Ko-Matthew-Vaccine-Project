@@ -1,10 +1,30 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8">
-    <title></title>
+      <meta charset="UTF-8">
+      <link href="static/basic.css" rel="stylesheet">
   </head>
   <body>
+    <table>
+         <thead>
+            <tr>
+               <th>Class</th>
+               <th>URL</th>
+               <th>Response</th>
+               <th>Reason</th>
+            </tr>
+         </thead>
 
+         <tbody>
+            {% for response in responses %}
+               <tr>
+                   <td>{{ response.output }}</td>
+                   <td><a href={{ response.url }}>Source</a></td>
+                   <td>{{ response.response }}</td>
+                   <td>{{ response.reason }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
   </body>
 </html>
