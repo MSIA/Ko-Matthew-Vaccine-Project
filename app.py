@@ -23,7 +23,7 @@ response_manager = ResponseManager(app)
 #     return "Hello world"
 
 @app.route("/", methods=['GET', 'POST'])
-def show_temp():
+def home():
     if request.method == "GET":
         try:
             logger.info("main page returned")
@@ -44,7 +44,7 @@ def show_temp():
         prediction = predict_ind(model, enc, cat_vars, year)
         top3 = np.argsort(prediction)[::-1]  # Gets indices sorted array descending
         top3 = top3[:3]  # Gets top 3 highest probabilities indexes
-        top3_probs = [prediction[i] for i in top3]  # Gets top 3 highest probabilities
+        top3_probs = [np.round(prediction[i],2) for i in top3]  # Gets top 3 highest probabilities
         url_for_post = url_for('response_page', class1=top3[0], class2=top3[1],
                                class3=top3[2], prob1=top3_probs[0],
                                prob2=top3_probs[1], prob3=top3_probs[2])
@@ -52,7 +52,7 @@ def show_temp():
         return redirect(url_for_post)
 
 
-@app.route("/response/<class1>/<class2>/<class3>/<prob1>/<prob2>/<prob3>",
+@app.route("/response.html/<class1>/<class2>/<class3>/<prob1>/<prob2>/<prob3>",
            methods=['GET', 'POST'])
 def response_page(class1, class2, class3, prob1, prob2, prob3):
     if request.method == "GET":
@@ -60,12 +60,18 @@ def response_page(class1, class2, class3, prob1, prob2, prob3):
         try:
             response = response_manager.session.query(VaccineSentiment)\
                                        .filter(VaccineSentiment.output.in_([class1, class2, class3]))
-
-            return render_template('response.html', responses=response)
+            probs = [prob1, prob2, prob3]
+            return render_template('response.html', responses=response,
+                                   probabilities=probs)
         except Exception as e:
             logger.error(e)
 
-        #return str(class1 + " " + class2 + " " + class3 + " " + prob1 + " " + prob2 + " " + prob3)
+    if request.method == "POST":
+        url_for_post = url_for('home/')
+
+        return redirect(url_for_post)
+
+
 
 if __name__ == '__main__':
     app.run(debug=app.config["DEBUG"], port=app.config["PORT"], host=app.config["HOST"])
