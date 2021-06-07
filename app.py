@@ -15,12 +15,10 @@ logger = logging.getLogger(app.config["APP_NAME"])
 
 model_path = app.config["MODEL_PATH"]
 encoder_path = app.config["ENCODER_PATH"]
+model, enc = get_model(model_path, encoder_path)
 
 response_manager = ResponseManager(app)
 
-# @app.route("/")
-# def main():
-#     return "Hello world"
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
@@ -30,47 +28,50 @@ def home():
             return render_template('index.html')
         except Exception as e:
             logger.error(e)
+            return render_template('error.html')
 
     if request.method == "POST":
-        model, enc = get_model(model_path, encoder_path)
-        gender = int(request.form["gender"])
-        race = int(request.form["race"])
-        educ = int(request.form["education"])
-        marital = int(request.form["ms"])
-        work = int(request.form["work"])
-        region = int(request.form["region"])
-        cat_vars = [gender, race, educ, marital, work, region]
-        year = int(request.form["year"])
-        prediction = predict_ind(model, enc, cat_vars, year)
-        top3 = np.argsort(prediction)[::-1]  # Gets indices sorted array descending
-        top3 = top3[:3]  # Gets top 3 highest probabilities indexes
-        top3_probs = [np.round(prediction[i],2) for i in top3]  # Gets top 3 highest probabilities
-        url_for_post = url_for('response_page', class1=top3[0], class2=top3[1],
-                               class3=top3[2], prob1=top3_probs[0],
-                               prob2=top3_probs[1], prob3=top3_probs[2])
+        try:
+            gender = int(request.form["gender"])
+            race = int(request.form["race"])
+            educ = int(request.form["education"])
+            marital = int(request.form["ms"])
+            work = int(request.form["work"])
+            region = int(request.form["region"])
+            cat_vars = [gender, race, educ, marital, work, region]
+            year = int(request.form["year"])
+            prediction = predict_ind(model, enc, cat_vars, year)
+            top3 = np.argsort(prediction)[::-1]  # Gets indices sorted array descending
+            top3 = top3[:3]  # Gets top 3 highest probabilities indexes
+            top3_probs = [np.round(prediction[i],2) for i in top3]  # Gets top 3 highest probabilities
+            url_for_post = url_for('response_page', class1=top3[0], class2=top3[1],
+                                   class3=top3[2], prob1=top3_probs[0],
+                                   prob2=top3_probs[1], prob3=top3_probs[2])
 
-        return redirect(url_for_post)
+            return redirect(url_for_post)
+        except Exception as e:
+            logger.error(e)
+            return render_template('error.html')
 
 
 @app.route("/response.html/<class1>/<class2>/<class3>/<prob1>/<prob2>/<prob3>",
            methods=['GET', 'POST'])
 def response_page(class1, class2, class3, prob1, prob2, prob3):
     if request.method == "GET":
-
         try:
             response = response_manager.session.query(VaccineSentiment)\
-                                       .filter(VaccineSentiment.output.in_([class1, class2, class3]))
+                                       .filter(VaccineSentiment.output.in_([int(class1), int(class2), int(class3)]))
             probs = [prob1, prob2, prob3]
             return render_template('response.html', responses=response,
                                    probabilities=probs)
         except Exception as e:
             logger.error(e)
+            return render_template('error.html')
 
     if request.method == "POST":
         url_for_post = url_for('home/')
 
         return redirect(url_for_post)
-
 
 
 if __name__ == '__main__':
