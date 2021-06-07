@@ -19,13 +19,24 @@ def clean(local_path, columns, response, threshold, null_vals, other, save_path)
         dfm (pandas.core.frame.DataFrame): DataFrame holding full clean data
     '''
     df = pd.read_csv(local_path)
+    df = filter(df, columns, response, threshold)
+    df = replace_na(df, null_vals, other)
+    df = df.drop(response, axis=1)
+    df.to_csv(save_path, index=False)
+
+
+def filter(df, columns, response, threshold):
+    '''Filters out columns and rows wanted based on response
+    '''
     dfm = df[columns]
     dfm = dfm[df[response]>threshold]
-    
-    for val in null_vals:
-        dfm = dfm.replace(val, other)
-
-    dfm = dfm.drop(response, axis=1)
-    dfm.to_csv(save_path, index=False)
 
     return dfm
+
+
+def replace_na(df, nulls, other):
+    '''
+    '''
+    for val in null_vals:
+        df = df.replace(val, other)
+    return df

@@ -29,7 +29,7 @@ sb_create = subparsers.add_parser('create_db', description='Create database')
 
 # Sub-parser for ingesting new data into s3 bucket
 sb_ingest = subparsers.add_parser('acquire', description='Add data to s3 bucket')
-sb_ingest.add_argument('--s3_raw', required=True,
+sb_ingest.add_argument('--s3_raw', required=False,
                        help='Will load data to specified path')
 
 # Sub-parser for cleaning raw data from s3 bucket
@@ -70,8 +70,8 @@ if __name__ == '__main__':
             unzip(**y_conf['acquire']['unzip'])
             upload_s3(args.s3_raw, y_conf['acquire']['upload_s3']['local_path'])
         else:
-            get_zip(**y_conf['ingest']['get_zip'])
-            unzip(**y_conf['ingest']['unzip'])
+            get_zip(**y_conf['acquire']['get_zip'])
+            unzip(**y_conf['acquire']['unzip'])
     elif sp_used == 'clean':
         if args.s3_raw:
             download_s3(args.s3_raw, **y_conf['acquire']['download_s3'])
@@ -80,7 +80,7 @@ if __name__ == '__main__':
         else:
             clean(**y_conf['clean']['clean'])
     elif sp_used == 'train':
-        if args.s3_clean:
+        if args.s3_model:
             download_s3(args.s3_clean, y_conf['train']['local_path'],
                         y_conf['train']['sep'])
             train(y_conf['train']['local_path'], **y_conf['train']['train'])
