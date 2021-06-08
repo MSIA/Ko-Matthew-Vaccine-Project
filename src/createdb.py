@@ -50,7 +50,8 @@ def create_db():
 
 def add_df(local_path):
     '''Adds clean dataframe to database either locally or in AWS RDS'''
-    if os.environ.get('MYSQL_HOST') is None:
+    if os.environ.get('MYSQL_HOST') is None and\
+       os.environ.get('SQLALCHEMY_DATABASE_URI') is None:
         logger.info('Database location: Local')
         logger.debug('Set MYSQL_HOST variable for AWS RDS instead of local')
     else:
