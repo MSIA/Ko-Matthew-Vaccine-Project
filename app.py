@@ -6,28 +6,41 @@ from flask import render_template, request, redirect, url_for
 from src.train import get_model, predict_ind
 from src.createdb import VaccineSentiment, ResponseManager
 
+# Initialize Flask app
 app = Flask(__name__, template_folder="app/templates", static_folder="app/static")
 
+# Configure flask app from flask_config.py
 app.config.from_pyfile('config/flaskconfig.py')
 
+# Define LOGGING_CONFIG from flask_config.py
 logging.config.fileConfig(app.config["LOGGING_CONFIG"])
 logger = logging.getLogger(app.config["APP_NAME"])
 
+# Load model and encoder to make new predictions
 model_path = app.config["MODEL_PATH"]
 encoder_path = app.config["ENCODER_PATH"]
 model, enc = get_model(model_path, encoder_path)
 
+# Manager to query data from sql table
 response_manager = ResponseManager(app)
 
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
+    '''Main page of application providing information and collecting form info
+
+    Args:
+        None
+
+    Returns:
+        rendered html template
+    '''
     if request.method == "GET":
         try:
             logger.info("main page returned")
             return render_template('index.html')
         except Exception as e:
-            logger.error(e)
+            logger.error("Error page returned with error: ", e)
             return render_template('error.html')
 
     if request.method == "POST":
@@ -50,13 +63,25 @@ def home():
 
             return redirect(url_for_post)
         except Exception as e:
-            logger.error(e)
+            logger.error("Error page returned with error: ", e)
             return render_template('error.html')
 
 
 @app.route("/response.html/<class1>/<class2>/<class3>/<prob1>/<prob2>/<prob3>",
            methods=['GET', 'POST'])
 def response_page(class1, class2, class3, prob1, prob2, prob3):
+    '''Page that displays model predictions and sql table with additional info
+    Args:
+        class1 (str): number indicating predicted reason number one
+        class2 (str): number indicating predicted reason number two
+        class3 (str): number indicating predicted reason number three
+        prob1 (str): probability for predicted reason number one
+        prob2 (str): probability for predicted reason number two
+        prob3 (str): probability for predicted reason number three
+
+    Returns:
+        rendered html template
+    '''
     if request.method == "GET":
         try:
             response = response_manager.session.query(VaccineSentiment)\

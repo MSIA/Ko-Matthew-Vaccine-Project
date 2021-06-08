@@ -35,6 +35,8 @@ train:
     encoder_path: models/encoder.pkl
     test_size: 0.2
     random_state: 123
+    max_depth: 10
+    n_estimators: 100
 
 acquire:
   get_zip:

@@ -13,19 +13,22 @@ logger = logging.getLogger(__name__)
 
 
 def train(local_path, category_cols, response_cols, year_col, results_path,
-          model_path, encoder_path, test_size, random_state):
-    '''Orchestration function to train and evaluate vaccine sentiment model
+          model_path, encoder_path, test_size, random_state, max_depth,
+          n_estimators):
+    '''Orchestration function to train, evaluate & save vaccine sentiment model
 
     Args:
-        local_path ():
-        category_cols ():
-        response_col ():
-        year_col ():
-        results_path ():
-        model_path ():
-        encoder_path ():
-        test_size ():
-        random_state ():
+        local_path (str): path to cleaned data
+        category_cols (:obj:`list` of :obj:`str): columns representing categorical features
+        response_cols (:obj:`list` of :obj:`str): columns representing response
+        year_col (str): column name for birth year
+        results_path (str): path to write model evaluation results to
+        model_path (str): path to pickled model
+        encoder_path (str): path to pickled encoder
+        test_size (float): fraction of original data to split into test set
+        random_state (int): random state for training model
+        max_depth (int): max depth of trees in random forest model
+        n_estimators (int): number of trees in random forest model
 
     Returns:
         None
@@ -36,31 +39,36 @@ def train(local_path, category_cols, response_cols, year_col, results_path,
     year = df[year_col].reset_index(drop=True)
     features = pd.concat([pd.DataFrame(features.toarray()),year], axis=1)
     response = np.array(df[response_cols])
-    model = train_evaluate(features, response, results_path, test_size, random_state)
+    model = train_evaluate(features, response, results_path, test_size,
+                           random_state, max_depth, n_estimators)
     pickle.dump(model, open(model_path, 'wb'))
     logger.info("Model saved to: %s", model_path)
     pickle.dump(enc, open(encoder_path, 'wb'))
     logger.info("OneHotEncoder saved to: %s", encoder_path)
 
 
-def train_evaluate(features, response, results_path, test_size, random_state):
+def train_evaluate(features, response, results_path, test_size, random_state,
+                   max_depth, n_estimators):
     '''Function to split data, train model, and evaluate model
 
     Args:
-        features ():
-        response ():
-        results_path ():
-        test_size ():
-        random_state ():
+        features (pandas.core.frame.DataFrame): DataFrame holding feature variables
+        response (numpy.ndarray): array holding responses for each individual
+        results_path (str): path to write model evaluation results to
+        test_size (float): fraction of original data to split into test set
+        random_state (int): random state for training model
+        max_depth (int): max depth of trees in random forest model
+        n_estimators (int): number of trees in random forest model
 
     Returns:
-        None
+        ovr (sklearn.multiclass.OneVsRestClassifier): multilabel random forest model
     '''
     X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(
                                                         features, response,
                                                         test_size=test_size,
                                                         random_state=random_state)
-    model = RandomForestClassifier()
+    model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth,
+                                   random_state=random_state)
     logger.debug("Model training")
     ovr = OneVsRestClassifier(model).fit(X_train,y_train)
     ypred_bin_test = ovr.predict(X_test)
@@ -78,7 +86,16 @@ def train_evaluate(features, response, results_path, test_size, random_state):
 
 
 def get_model(model_path, encoder_path):
+    '''Opens pickled model and encoder for the data
 
+    Args:
+        model_path (str): path to pickled model
+        encoder_path (str): path to pickled encoder
+
+    Returns:
+        model (sklearn.multiclass.OneVsRestClassifier): multilabel random forest model
+        encoder (sklearn.preprocessing._encoders.OneHotEncoder): encoder for categorical variables
+    '''
     with open(model_path, "rb") as input_file:
         model = pickle.load(input_file)
     with open(encoder_path, "rb") as input_file:
@@ -87,11 +104,37 @@ def get_model(model_path, encoder_path):
     return model, enc
 
 
-def predict_ind(model, encoder, cat_inputs, year):
+def transform(encoder, cat_inputs, year):
+    '''Transforms raw input into encoded input for model use
 
+    Args:
+        encoder (sklearn.preprocessing._encoders.OneHotEncoder): encoder for categorical variables
+        cat_inputs (:obj:`list` of :obj:`str`): categorical inputs of individual
+        year (int): birth year for individual
+
+    Returns:
+        test_new (2D :obj:`list` of :obj:`int): encoded inputs for model prediction
+    '''
     test_new = encoder.transform([cat_inputs]).toarray()
     test_new = np.append(test_new[0],year)
-    prediction = model.predict_proba([test_new])
+    test_new = [test_new]
+    return test_new
+
+
+
+def predict_ind(model, encoder, cat_inputs, year):
+    '''Predicts the probabilities for a new model
+    Args:
+        model (sklearn.multiclass.OneVsRestClassifier): multilabel random forest model
+        encoder (sklearn.preprocessing._encoders.OneHotEncoder): encoder for categorical variables
+        cat_inputs (:obj:`list` of :obj:`str`): categorical inputs of individual
+        year (int): birth year for individual
+
+    Returns:
+        prediction (numpy.ndarray): array of predicted probabilities
+    '''
+    test_new = tranform(encoder, cat_inputs, year)
+    prediction = model.predict_proba(test_new)
     prediction = prediction[0]
 
     return prediction
