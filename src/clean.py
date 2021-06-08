@@ -19,7 +19,11 @@ def clean(local_path, columns, response, threshold, null_vals, other, save_path)
     Returns:
         None
     '''
-    df = pd.read_csv(local_path)
+    try:
+        df = pd.read_csv(local_path)
+    except FileNotFoundError:
+        logger.error("File %s not found at ", local_path)
+        logger.debug("Check path in the configuration file")
     df = filter(df, columns, response, threshold)
     df = replace_na(df, null_vals, other)
     df = df.drop(response, axis=1)
@@ -46,7 +50,7 @@ def filter(df, columns, response, threshold):
 
 def replace_na(df, nulls, other):
     '''Replace coded na values with a code for other
-    
+
     Args:
         df (pandas.core.frame.DataFrame): DataFrame with coded null values
         nulls (:obj:`list` of :obj:`int`): values representing no answer
@@ -55,6 +59,6 @@ def replace_na(df, nulls, other):
     Returns
         df (pandas.core.frame.DataFrame): DataFrame holding replaced values
     '''
-    for val in null_vals:
+    for val in nulls:
         df = df.replace(val, other)
     return df
