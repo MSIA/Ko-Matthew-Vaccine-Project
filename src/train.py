@@ -33,7 +33,11 @@ def train(local_path, category_cols, response_cols, year_col, results_path,
     Returns:
         None
     '''
-    df = pd.read_csv(local_path)
+    try:
+        df = pd.read_csv(local_path)
+    except FileNotFoundError:
+        logger.error("File %s not found at ", local_path)
+        logger.debug("Check path in the configuration file")
     enc = OneHotEncoder().fit(df[category_cols])
     features = enc.transform(df[category_cols])
     year = df[year_col].reset_index(drop=True)
@@ -96,10 +100,18 @@ def get_model(model_path, encoder_path):
         model (sklearn.multiclass.OneVsRestClassifier): multilabel random forest model
         encoder (sklearn.preprocessing._encoders.OneHotEncoder): encoder for categorical variables
     '''
-    with open(model_path, "rb") as input_file:
-        model = pickle.load(input_file)
-    with open(encoder_path, "rb") as input_file:
-        enc = pickle.load(input_file)
+    try:
+        with open(model_path, "rb") as input_file:
+            model = pickle.load(input_file)
+    except FileNotFoundError:
+        logger.error("File %s not found at ", model_path)
+        logger.debug("Check path in the configuration file")
+    try:
+        with open(encoder_path, "rb") as input_file:
+            enc = pickle.load(input_file)
+    except FileNotFoundError:
+        logger.error("File %s not found at ", encoder_path)
+        logger.debug("Check path in the configuration file")
 
     return model, enc
 
@@ -133,7 +145,7 @@ def predict_ind(model, encoder, cat_inputs, year):
     Returns:
         prediction (numpy.ndarray): array of predicted probabilities
     '''
-    test_new = tranform(encoder, cat_inputs, year)
+    test_new = transform(encoder, cat_inputs, year)
     prediction = model.predict_proba(test_new)
     prediction = prediction[0]
 
