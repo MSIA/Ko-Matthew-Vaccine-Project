@@ -30,20 +30,12 @@ sb_download = subparsers.add_parser('clean',
                                     description='Download & clean data from s3 bucket')
 sb_download.add_argument('--s3_raw', required=False,
                          help='Will load data from specified path')
-sb_download.add_argument('--s3_clean', required=False,
-                         help='Will load clean data to specified path')
 
 # Sub-parser for training and saving model
 sb_train = subparsers.add_parser('train',
                                  description='Train model / OneHotEncoder and save to s3 bucket')
 sb_train.add_argument('--s3_clean', required=False,
                       help='Will load data from specified path')
-sb_train.add_argument('--s3_model', required=False,
-                      help='Will upload model to path')
-sb_train.add_argument('--s3_enc', required=False,
-                      help='Will upload OneHotEncoder to path')
-sb_train.add_argument('--s3_results', required=False,
-                      help='Will upload model results file to path')
 
 args = parser.parse_args()
 sp_used = args.subparser_name
@@ -69,17 +61,13 @@ if __name__ == '__main__':
         if args.s3_raw:
             download_s3(args.s3_raw, **y_conf['acquire']['download_s3'])
             clean(**y_conf['clean']['clean'])
-            upload_s3(args.s3_clean, y_conf['clean']['clean']['save_path'])
         else:
             clean(**y_conf['clean']['clean'])
     elif sp_used == 'train':
-        if args.s3_model:
+        if args.s3_clean:
             download_s3(args.s3_clean, y_conf['train']['local_path'],
                         y_conf['train']['sep'])
             train(y_conf['train']['local_path'], **y_conf['train']['train'])
-            upload_s3(args.s3_model, y_conf['train']['train']['model_path'])
-            upload_s3(args.s3_enc, y_conf['train']['train']['encoder_path'])
-            upload_s3(args.s3_results, y_conf['train']['train']['results_path'])
         else:
             train(y_conf['train']['local_path'], **y_conf['train']['train'])
     else:
