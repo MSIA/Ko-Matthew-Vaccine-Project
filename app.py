@@ -37,7 +37,7 @@ def home():
     '''
     if request.method == "GET":
         try:
-            logger.info("main page returned")
+            logger.info("Main page returned")
             return render_template('index.html')
         except Exception as e:
             logger.error("Error page returned with error: ", e)
@@ -60,7 +60,7 @@ def home():
             url_for_post = url_for('response_page', class1=top3[0], class2=top3[1],
                                    class3=top3[2], prob1=top3_probs[0],
                                    prob2=top3_probs[1], prob3=top3_probs[2])
-
+            logger.info("Prediction submitted from form")
             return redirect(url_for_post)
         except Exception as e:
             logger.error("Error page returned with error: ", e)
@@ -84,6 +84,7 @@ def response_page(class1, class2, class3, prob1, prob2, prob3):
     '''
     if request.method == "GET":
         try:
+            logger.info("Response page returned")
             response = response_manager.session.query(VaccineSentiment)\
                                        .filter(VaccineSentiment.output.in_([int(class1), int(class2), int(class3)]))
             probs = [prob1, prob2, prob3]
@@ -96,7 +97,6 @@ def response_page(class1, class2, class3, prob1, prob2, prob3):
 
     if request.method == "POST":
         url_for_post = url_for('home/')
-
         return redirect(url_for_post)
 
 

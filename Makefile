@@ -24,7 +24,7 @@ model: data/clean/clean.csv
 				--s3_enc s3://2021-msia423-ko-matthew/model/encoder.pkl \
 				--s3_results s3://2021-msia423-ko-matthew/model/results.yaml
 
-app: models/model.pkl models/encoder.pkl
+flask: models/model.pkl models/encoder.pkl
 				docker run -e SQLALCHEMY_DATABASE_URI \
 				--mount type=bind,source="$(shell pwd)",target=/app/ \
 				-p 5000:5000 \
@@ -35,8 +35,8 @@ tests:
 
 acquire: db raw
 
-flask: data/clean/clean.csv models/model.pkl models/encoder.pkl app
+app: data/clean/clean.csv models/model.pkl models/encoder.pkl flask
 
 pipeline: clean model
 
-.PHONY: tests clean all raw model acquire flask app
+.PHONY: tests clean all raw model acquire app flask
