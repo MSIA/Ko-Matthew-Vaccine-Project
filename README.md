@@ -120,9 +120,13 @@ make acquire
 
 Or you can use run docker commands to run these steps individually:
 
+Create database:
+
 ```bash
 docker run --mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py create_db
 ```
+
+Acquire raw data and upload it to S3:
 
 ```bash
 docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire --s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv
