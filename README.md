@@ -102,6 +102,12 @@ To build the image for ingesting the data and setting up the database, run this 
 make image
 ```
 
+Or building it directly with docker, run:
+
+```bash
+docker build -f app/Dockerfile -t vaccine_project_mjk3551 .
+```
+
 This command builds the Docker image, with the tag `vaccine_project_mjk3551`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
 
 ### 2.2 Run acquire and create database
@@ -110,6 +116,16 @@ To acquire raw data, create the database and upload the raw data to S3, run from
 
 ```bash
 make acquire
+```
+
+Or you can use run docker commands to run these steps individually:
+
+```bash
+docker run --mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py create_db
+```
+
+```bash
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire --s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv
 ```
 
 The raw data will be uploaded to the S3 path: `s3://2021-msia423-ko-matthew/raw/pulse2021.csv`. If you do not have the environment variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` set, this step will result in an error.
@@ -122,6 +138,20 @@ This step follows the creation of the database and acquisition of the raw data. 
 make pipeline
 ```
 
+Or you can use docker commands to run each step individually. However, it is recommended to run the make command above.
+
+Clean the raw data:
+
+```bash
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py clean --s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv --s3_clean s3://2021-msia423-ko-matthew/clean/clean.csv
+```
+
+Train and evaluate model:
+
+```bash
+docker run -e SQLALCHEMY_DATABASE_URI --mount type=bind,source="$(shell pwd)",target=/app/ -p 5000:5000 vaccine_project_mjk3551 app.py
+```
+
 ### 4. Run the app
 
 This step follows the model training pipeline and requires the artifacts created in step 3. If the environment variable `SQLALCHEMY_DATABASE_URI` is set, it will attempt to use the specified database, otherwise it will use the default database created in step 2.2.
@@ -132,6 +162,12 @@ Run from the root directory:
 
 ```bash
 make app
+```
+
+Alternatively, you can run the functionality above, with a docker command.
+
+```bash
+docker run -e SQLALCHEMY_DATABASE_URI --mount type=bind,source="$(shell pwd)",target=/app/ -p 5000:5000 vaccine_project_mjk3551 app.py
 ```
 
 After the command finishes, you should be able to access the app at: http://0.0.0.0:5000/
