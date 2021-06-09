@@ -171,7 +171,7 @@ make app
 Alternatively, you can run the functionality above, with a docker command.
 
 ```bash
-docker run -e SQLALCHEMY_DATABASE_URI --mount type=bind,source="$(shell pwd)",target=/app/ -p 5000:5000 vaccine_project_mjk3551 app.py
+docker run -e SQLALCHEMY_DATABASE_URI --mount type=bind,source="$(pwd)",target=/app/ -p 5000:5000 vaccine_project_mjk3551 app.py
 ```
 
 After the command finishes, you should be able to access the app at: http://0.0.0.0:5000/
