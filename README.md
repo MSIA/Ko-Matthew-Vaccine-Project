@@ -126,6 +126,8 @@ make pipeline
 
 This step follows the model training pipeline and requires the artifacts created in step 3. If the environment variable `SQLALCHEMY_DATABASE_URI` is set, it will attempt to use the specified database, otherwise it will use the default database created in step 2.3.
 
+Note: If you are attempting to connect to the RDS database as part of Northwestern MSiA program with credentials set in the SQLALCHEMY_DATABASE_URI, please remember to connect to the Northwestern VPN. 
+
 Run from the root directory:
 
 ```bash
