@@ -5,6 +5,8 @@ db:
 				docker run \
 				--mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py create_db
 
+data/raw/pulse2021_puf_27.csv: raw
+
 raw:
 				docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
 				--mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire \
