@@ -1,0 +1,84 @@
+model:
+  model_path: models/model.pkl
+  encoder_path: models/encoder.pkl
+
+create_db:
+  local_path: data/additional/external.csv
+
+train:
+  local_path: data/clean/clean.csv
+  sep: ','
+  train:
+    category_cols:
+      - EGENDER
+      - RRACE
+      - EEDUC
+      - MS
+      - KINDWORK
+      - REGION
+    response_cols:
+      - WHYNOT1
+      - WHYNOT2
+      - WHYNOT3
+      - WHYNOT4
+      - WHYNOT5
+      - WHYNOT6
+      - WHYNOT7
+      - WHYNOT8
+      - WHYNOT9
+      - WHYNOT10
+      - WHYNOT11
+    year_col:
+      - TBIRTH_YEAR
+    results_path: models/model_results.yaml
+    model_path: models/model.pkl
+    encoder_path: models/encoder.pkl
+    test_size: 0.2
+    random_state: 123
+    max_depth: 10
+    n_estimators: 100
+
+acquire:
+  get_zip:
+    url: https://www2.census.gov/programs-surveys/demo/datasets/hhp/2021/wk27/HPS_Week27_PUF_CSV.zip
+    file_name: data/raw/pulse2021.zip
+  unzip:
+    source_path: data/raw/pulse2021.zip
+    destination_path: data/raw/
+    data_filename: pulse2021_puf_27.csv
+  upload_s3:
+    local_path: data/raw/pulse2021_puf_27.csv
+  download_s3:
+    local_path: data/raw/pulse2021_puf_27.csv
+    sep: ','
+
+clean:
+  clean:
+    local_path: data/raw/pulse2021_puf_27.csv
+    save_path: data/clean/clean.csv
+    columns:
+      - EGENDER
+      - RRACE
+      - EEDUC
+      - MS
+      - KINDWORK
+      - REGION
+      - TBIRTH_YEAR
+      - GETVACC
+      - WHYNOT1
+      - WHYNOT2
+      - WHYNOT3
+      - WHYNOT4
+      - WHYNOT5
+      - WHYNOT6
+      - WHYNOT7
+      - WHYNOT8
+      - WHYNOT9
+      - WHYNOT10
+      - WHYNOT11
+    response: GETVACC
+    threshold: 2
+    null_vals:
+      - -88
+      - -99
+    other: 0

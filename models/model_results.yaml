@@ -1,0 +1,77 @@
+- '0':
+    f1-score: 0.5432242990654206
+    precision: 0.5464159811985899
+    recall: 0.5400696864111498
+    support: 861
+  '1':
+    f1-score: 0.0
+    precision: 0.0
+    recall: 0.0
+    support: 336
+  '10':
+    f1-score: 0.006230529595015576
+    precision: 1.0
+    recall: 0.003125
+    support: 320
+  '2':
+    f1-score: 0.18861209964412812
+    precision: 0.5888888888888889
+    recall: 0.11228813559322035
+    support: 472
+  '3':
+    f1-score: 0.0
+    precision: 0.0
+    recall: 0.0
+    support: 231
+  '4':
+    f1-score: 0.0
+    precision: 0.0
+    recall: 0.0
+    support: 116
+  '5':
+    f1-score: 0.2502818489289741
+    precision: 0.5388349514563107
+    recall: 0.16299559471365638
+    support: 681
+  '6':
+    f1-score: 0.0
+    precision: 0.0
+    recall: 0.0
+    support: 289
+  '7':
+    f1-score: 0.0
+    precision: 0.0
+    recall: 0.0
+    support: 44
+  '8':
+    f1-score: 0.019230769230769232
+    precision: 0.3157894736842105
+    recall: 0.009917355371900827
+    support: 605
+  '9':
+    f1-score: 0.029914529914529916
+    precision: 0.7
+    recall: 0.015283842794759825
+    support: 458
+  macro avg:
+    f1-score: 0.09431764330716703
+    precision: 0.335448117748
+    recall: 0.07669814680769883
+    support: 4413
+  micro avg:
+    f1-score: 0.22997138769670958
+    precision: 0.5453774385072095
+    recall: 0.14570586902334012
+    support: 4413
+  samples avg:
+    f1-score: 0.1645074583536122
+    precision: 0.2894970414201183
+    recall: 0.13240302432610124
+    support: 4413
+  weighted avg:
+    f1-score: 0.17097489490230275
+    precision: 0.4412007588688503
+    recall: 0.14570586902334012
+    support: 4413
+- AUC: '0.5723124501287978'
+  Hamming Loss: '0.2316299085529855'

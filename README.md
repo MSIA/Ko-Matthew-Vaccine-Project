@@ -9,9 +9,11 @@
 - [Running the app](#running-the-app)
   * [1. Set up environment variables](#1-set-up-environment-variables)
     + [How to set up environment variables required](#how-to-set-up-environment-variables-required)
-  * [2. Build the image](#2-build-the-image)
-  * [3. Push data to S3](#3-push-data-to-s3)
-  * [4. Initialize the database](#4-initialize-the-database)
+  * [2. Create database and acquire data from source](#2-create-database-and-acquire-data-from-source)
+    + [Build the image](#build-the-image)
+    + [Run acquire and create database](#run-acquire-and-create-database)
+  * [3. Run the model training pipeline](#3-run-the-model-training-pipeline)
+  * [4. Run the app](#4-run-the-app)
 
 <!-- tocstop -->
 
@@ -33,41 +35,31 @@ The business metric will be tracked by the number of users. If the number of use
 ├── app
 │   ├── static/                       <- CSS, JS files that remain static
 │   ├── templates/                    <- HTML (or other code) that is templated and changes based on a set of inputs
-│   ├── boot.sh                       <- Start up script for launching app in Docker container.
 │   ├── Dockerfile                    <- Dockerfile for building image to run app  
 │
 ├── config                            <- Directory for configuration files
 │   ├── local/                        <- Directory for keeping environment variables and other local configurations that *do not sync** to Github
 │   ├── logging/                      <- Configuration of python loggers
 │   ├── flaskconfig.py                <- Configurations for Flask API
-│   ├── config.py                     <- Configurations for general source data information
+│   ├── test.yaml                     <- Configurations for general source data information
 │   
 ├── data                              <- Folder that contains data used or generated. Only the external/ and sample/ subdirectories are tracked by git.
-│   ├── external/                     <- External data sources, usually reference data,  will be synced with git
-│   ├── sample/                       <- Sample data used for code development and testing, will be synced with git
+│   ├── additional/                   <- Created data sources for app
+│   ├── clean/                        <- Clean data
+│   ├── raw/                          <- Raw data
 │
 ├── deliverables/                     <- Any white papers, presentations, final work products that are presented or delivered to a stakeholder
 │
-├── docs/                             <- Sphinx documentation based on Python docstrings. Optional for this project.
-│
-├── figures/                          <- Generated graphics and figures to be used in reporting, documentation, etc
-│
 ├── models/                           <- Trained model objects (TMOs), model predictions, and/or model summaries
-│
-├── notebooks/
-│   ├── archive/                      <- Develop notebooks no longer being used.
-│   ├── deliver/                      <- Notebooks shared with others / in final state
-│   ├── develop/                      <- Current notebooks being used in development.
-│
-├── reference/                        <- Any reference material relevant to the project
 │
 ├── src/                              <- Source data for the project
 │
-├── test/                             <- Files necessary for running model tests (see documentation below)
+├── tests/                             <- Files necessary for running model tests (see documentation below)
 │
 ├── app.py                            <- Flask wrapper for running the model
 ├── run.py                            <- Simplifies the execution of one or more of the src scripts  
 ├── requirements.txt                  <- Python package dependencies
+├── Makefile                          <- Wrapper for docker commands
 ```
 
 ## Running the app
@@ -90,56 +82,96 @@ export AWS_SECRET_ACCESS_KEY="MY_SECRET_ACCESS_KEY"
 
 For RDS services:
 ```bash
-export MYSQL_USER="MY_USERNAME"
-export MYSQL_PASSWORD="MY_PASSWORD"
-export MYSQL_HOST="MY_HOST"
-export MYSQL_PORT="MY_PORT"
-export DATABASE_NAME="MY_DATABASE"
+export SQLALCHEMY_DATABASE_URI="{dialect}://{user}:{pw}@{host}:{port}/{db}"
 ```
 
-If the MYSQL_* variables are not set, the database will be built locally rather than through AWS RDS.
+The form of SQLALCHEMY_DATABASE_URI is above, where `dialect` is the type of sql database connecting to, the `user` is the database user, `pw` is the password, `host` is the host of the connection, along with the `port` and name of database `db`. If local, the SQLALCHEMY_DATABASE_URI is set by default to `sqlite:///data/vSentiment.db`.
+If the SQLALCHEMY_DATABASE_URI is not set when running the app, it will use a locally created database. Instructions to create this database is in step 2.
 
-### 2. Build the image
+### 2. Create database and acquire data from source
+
+This step is required if you would like to run the app locally without connections to AWS S3 or RDS. This step will download the data from the source site as well as create a local database that are both required for the app. Optionally this step will allow the user to push the raw data into their own s3 bucket.
+
+### 2.1 Build the image
 
 The Dockerfile used for running the ingestion and setting up the database is located in the `app/` folder.
 
 To build the image for ingesting the data and setting up the database, run this command from the root of the repository:
 
 ```bash
- docker build -f app/Dockerfile -t vaccine_project .
+make image
 ```
 
-This command builds the Docker image for ingesting and setting up the database, with the tag `vaccine_project`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
-
-### 3. Push data to S3
-
-To push data to S3, run from this directory:
+Or building it directly with docker, run:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
-  vaccine_project run.py ingest --s3path {your_s3_path}
+docker build -f app/Dockerfile -t vaccine_project_mjk3551 .
 ```
 
-`--s3path` is a required argument. This argument is the path in an s3 bucket the data will be uploaded to. This command runs the `run.py` command in the `vaccine_project` image to download the data from the source website, unzip it, and push the data into S3. The location the file downloded from the source url is configurable and located in `config/config.py`. Although configurable, it is not recommended that these locations change as errors may occur.
+This command builds the Docker image, with the tag `vaccine_project_mjk3551`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
 
-### 4. Initialize the database
+### 2.2 Run acquire and create database
 
-#### Create the database
-To create the database either in RDS or locally run from this directory:
+To acquire raw data, create the database and upload the raw data to S3, run from this directory:
 
 ```bash
-docker run \
-    -e MYSQL_HOST \
-    -e MYSQL_USER \
-    -e DATABASE_NAME \
-    -e MYSQL_PASSWORD \
-    -e MYSQL_PORT \
-    -e SQLALCHEMY_DATABASE_URI \
-     vaccine_project run.py create_db
+make acquire
 ```
 
-If the MYSQL_HOST environment variable is set, the above command will attempt to connect to AWS RDS services and create the database there at the specified RDS instance.
+Or you can use run docker commands to run these steps individually:
 
-Without a MYSQL_HOST environment variable set, the above command creates a local database located at `sqlite:///data/vSentiment.db`. If you would like to set the location of the database, please set the `SQLALCHEMY_DATABASE_URI` environment variable to the appropriate connection string before running the above command and pass it into the docker run command above instead of / in addition to the environment variables listed above. Otherwise, `SQLALCHEMY_DATABASE_URI` will be automatically generated from the `MYSQL_*` variables or set to `sqlite:///data/vSentiment.db`.
+Create database:
 
-For midpoint PR: The table name created is called "vaccine_model" in both RDS and the local database. For chloe and fausto's convenience, will be removed later. I was able to see the table in RDS and use the local vSentiment.db using pandas.read_sql and sqlalchemy.
+```bash
+docker run --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py create_db
+```
+
+Acquire raw data and upload it to S3:
+
+```bash
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire --s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv
+```
+
+The raw data will be uploaded to the S3 path: `s3://2021-msia423-ko-matthew/raw/pulse2021.csv`. If you do not have the environment variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` set, this step will result in an error.
+
+### 3. Run the model training pipeline
+
+This step follows the creation of the database and acquisition of the raw data. If environment variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` indicated above are set correctly, run the following step and it will upload the training artifacts to S3. In addition, the directory is mounted so you should see the artifacts in the data and models folder.
+
+```bash
+make pipeline
+```
+
+Or you can use docker commands to run each step individually. However, it is recommended to run the make command above.
+
+Clean the raw data:
+
+```bash
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py clean --s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv --s3_clean s3://2021-msia423-ko-matthew/clean/clean.csv
+```
+
+Train and evaluate model:
+
+```bash
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py train --s3_clean s3://2021-msia423-ko-matthew/clean/clean.csv --s3_model s3://2021-msia423-ko-matthew/model/model.pkl --s3_enc s3://2021-msia423-ko-matthew/model/encoder.pkl --s3_results s3://2021-msia423-ko-matthew/model/results.yaml
+```
+
+### 4. Run the app
+
+This step follows the model training pipeline and requires the artifacts created in step 3. If the environment variable `SQLALCHEMY_DATABASE_URI` is set, it will attempt to use the specified database, otherwise it will use the default database created in step 2.2.
+
+Note: If you are attempting to connect to the RDS database as part of Northwestern MSiA program with credentials set in the SQLALCHEMY_DATABASE_URI, please remember to connect to the Northwestern VPN.
+
+Run from the root directory:
+
+```bash
+make app
+```
+
+Alternatively, you can run the functionality above, with a docker command.
+
+```bash
+docker run -e SQLALCHEMY_DATABASE_URI --mount type=bind,source="$(pwd)",target=/app/ -p 5000:5000 vaccine_project_mjk3551 app.py
+```
+
+After the command finishes, you should be able to access the app at: http://0.0.0.0:5000/
