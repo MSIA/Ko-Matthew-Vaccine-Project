@@ -3,19 +3,12 @@ import argparse
 import os
 
 import yaml
-from config import config
 from src.acquire import upload_s3, get_zip, unzip, download_s3
 from src.createdb import create_db, add_df
 from src.clean import clean
 from src.train import train
 
 logging.config.fileConfig('config/logging/local.conf')
-
-source_url = config.SOURCE_URL  # url cotaining data for application
-zip_loc = config.RAW_ZIP_LOCATION  # path to zip file downloaded
-raw_directory = config.RAW_LOCATION  # Directory of zip file, for unzip function
-file_name = config.DATA_FILENAME  # File to extract within zip
-csv_loc = config.RAW_CSV_LOCATION  # Path to csv that was extracted
 
 # Add parsers for both creating a database and uploading source data to s3 bucket
 parser = argparse.ArgumentParser(description='Create database or upload data to s3')
