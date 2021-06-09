@@ -123,13 +123,13 @@ Or you can use run docker commands to run these steps individually:
 Create database:
 
 ```bash
-docker run --mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py create_db
+docker run --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py create_db
 ```
 
 Acquire raw data and upload it to S3:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire --s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire --s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv
 ```
 
 The raw data will be uploaded to the S3 path: `s3://2021-msia423-ko-matthew/raw/pulse2021.csv`. If you do not have the environment variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` set, this step will result in an error.
@@ -147,19 +147,13 @@ Or you can use docker commands to run each step individually. However, it is rec
 Clean the raw data:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py clean --s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv --s3_clean s3://2021-msia423-ko-matthew/clean/clean.csv
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py clean --s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv --s3_clean s3://2021-msia423-ko-matthew/clean/clean.csv
 ```
 
 Train and evaluate model:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
---mount type=bind,source="$(shell pwd)",target=/app/ \
- vaccine_project_mjk3551 run.py train \
---s3_clean s3://2021-msia423-ko-matthew/clean/clean.csv \
---s3_model s3://2021-msia423-ko-matthew/model/model.pkl \
---s3_enc s3://2021-msia423-ko-matthew/model/encoder.pkl \
---s3_results s3://2021-msia423-ko-matthew/model/results.yaml
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py train --s3_clean s3://2021-msia423-ko-matthew/clean/clean.csv --s3_model s3://2021-msia423-ko-matthew/model/model.pkl --s3_enc s3://2021-msia423-ko-matthew/model/encoder.pkl --s3_results s3://2021-msia423-ko-matthew/model/results.yaml
 ```
 
 ### 4. Run the app
