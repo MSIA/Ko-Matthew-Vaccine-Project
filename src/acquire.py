@@ -21,6 +21,7 @@ def get_zip(url,file_name):
     Args:
         url (str): the url to the file to be downloaded
         file_name (str): the location and name of file that will be downloaded as path
+
     Returns:
         None
     '''
@@ -39,10 +40,12 @@ def get_zip(url,file_name):
 
 def unzip(source_path, destination_path, data_filename):
     '''Unzips a zip file
+
     Args:
         source_path (str): the filepath of the zip file
         destination_path (str): the directory to unzip file to
         data_filename (str): the file within the zip file to extract
+
     Returns:
         None
     '''
@@ -56,8 +59,10 @@ def unzip(source_path, destination_path, data_filename):
 
 def parse_s3(s3path):
     '''Parses string to extract bucket name and s3 path
+
     Args:
         s3path (str): full s3 path
+
     Returns:
         s3bucket (str): name of s3 bucket
         s3path (str): directory path within s3 bucket
@@ -73,9 +78,11 @@ def parse_s3(s3path):
 
 def upload_s3(s3path, local_path):
     '''Uploads file to s3 Bucket
+
     Args:
         local_path (str): the filepath location of file that will be uploaded
         s3path (str): the path where the file will be located on s3
+
     Returns:
         None
     '''
@@ -95,11 +102,13 @@ def upload_s3(s3path, local_path):
 
 
 def download_s3(s3path, local_path, sep):
-    '''
+    '''Downloads file from S3
+
     Args:
         local_path (str): the filepath location of file that will be downloaded to
         s3path (str): the path where the file will be located on s3
         sep (str): separator for downloaded file
+        
     Returns:
         None
     '''

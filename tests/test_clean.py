@@ -330,7 +330,6 @@ def test_replace_na_happy():
 
 
 def test_replace_na_sad():
-
     df_in_values = [[2, 1, 5, 5, 1, 3, 1970, 4, -99, -99, -99, -99, -99, -99,
                       -99, -99, 1, -99, -99]]
     df_in_index = [56234]

@@ -139,7 +139,6 @@ def transform(encoder, cat_inputs, year):
     return test_new
 
 
-
 def predict_ind(model, encoder, cat_inputs, year):
     '''Predicts the probabilities for a new model
     Args:

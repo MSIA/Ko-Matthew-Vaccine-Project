@@ -72,8 +72,19 @@ def add_df(local_path):
 
 
 class ResponseManager:
+    '''Class that aids in connecting to database for vaccine response'''
 
     def __init__(self, app=None, engine_string=None):
+        '''Initialize class for RepsonseManager
+
+        Args:
+            self
+            app (Flask app): initialized Flask application
+            engine_string (str): engine string to connect to databases
+
+        Returns:
+            None
+        '''
         if app:
             self.db = SQLAlchemy(app)
             self.session = self.db.session
