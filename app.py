@@ -84,10 +84,10 @@ def response_page(class1, class2, class3, prob1, prob2, prob3):
     '''
     if request.method == "GET":
         try:
-            logger.info("Response page returned")
             response = response_manager.session.query(VaccineSentiment)\
                                        .filter(VaccineSentiment.output.in_([int(class1), int(class2), int(class3)]))
             probs = [prob1, prob2, prob3]
+            logger.info("Response page requested")
             return render_template('response.html', responses=response,
                                    probabilities=probs)
         except Exception as e:
