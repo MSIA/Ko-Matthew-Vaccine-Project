@@ -41,12 +41,12 @@ The business metric will be tracked by the number of users. If the number of use
 │   ├── local/                        <- Directory for keeping environment variables and other local configurations that *do not sync** to Github
 │   ├── logging/                      <- Configuration of python loggers
 │   ├── flaskconfig.py                <- Configurations for Flask API
-│   ├── test.yaml                   <- Configurations for general source data information
+│   ├── test.yaml                     <- Configurations for general source data information
 │   
 ├── data                              <- Folder that contains data used or generated. Only the external/ and sample/ subdirectories are tracked by git.
-│   ├── additional/                     <- Created data sources for app
-│   ├── clean/                       <- Clean data
-│   ├── raw/                       <- Raw data
+│   ├── additional/                   <- Created data sources for app
+│   ├── clean/                        <- Clean data
+│   ├── raw/                          <- Raw data
 │
 ├── deliverables/                     <- Any white papers, presentations, final work products that are presented or delivered to a stakeholder
 │
