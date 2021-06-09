@@ -9,9 +9,11 @@
 - [Running the app](#running-the-app)
   * [1. Set up environment variables](#1-set-up-environment-variables)
     + [How to set up environment variables required](#how-to-set-up-environment-variables-required)
-  * [2. Build the image](#2-build-the-image)
-  * [3. Push data to S3](#3-push-data-to-s3)
-  * [4. Initialize the database](#4-initialize-the-database)
+  * [2. Create database and acquire data from source](#2-create-database-and-acquire-data-from-source)
+    + [Build the image](#build-the-image)
+    + [Run acquire and create database](#run-acquire-and-create-database)
+  * [3. Run the model training pipeline](#3-run-the-model-training-pipeline)
+  * [4. Run the app](#4-run-the-app)
 
 <!-- tocstop -->
 
@@ -90,18 +92,15 @@ export AWS_SECRET_ACCESS_KEY="MY_SECRET_ACCESS_KEY"
 
 For RDS services:
 ```bash
-export MYSQL_USER="MY_USERNAME"
-export MYSQL_PASSWORD="MY_PASSWORD"
-export MYSQL_HOST="MY_HOST"
-export MYSQL_PORT="MY_PORT"
-export DATABASE_NAME="MY_DATABASE"
+export SQLALCHEMY_DATABASE_URI="{dialect}://{user}:{pw}@{host}:{port}/{db}"
 ```
 
-If the MYSQL_* variables are not set, the database will be built locally rather than through AWS RDS.
+The form of SQLALCHEMY_DATABASE_URI is above, where `dialect` is the type of sql database connecting to, the `user` is the database user, `pw` is the password, `host` is the host of the connection, along with the `port` and name of database `db`. If local, the SQLALCHEMY_DATABASE_URI is set by default to `sqlite:///data/vSentiment.db`.
+If the SQLALCHEMY_DATABASE_URI is not set when running the app, it will use a locally created database. Instructions to create this database is in step 2.
 
-### 2.1 Create database and acquire data from source
+### 2. Create database and acquire data from source
 
-This step is required if you would like to run the app locally without connections to AWS S3 or RDS. These steps will download the data from the source site as well as create a local database that are required for the app. Optionally this step will allow the user to push the raw data into their own s3 bucket.
+This step is required if you would like to run the app locally without connections to AWS S3 or RDS. This step will download the data from the source site as well as create a local database that are both required for the app. Optionally this step will allow the user to push the raw data into their own s3 bucket.
 
 ### 2.2 Build the image
 
@@ -110,118 +109,37 @@ The Dockerfile used for running the ingestion and setting up the database is loc
 To build the image for ingesting the data and setting up the database, run this command from the root of the repository:
 
 ```bash
- docker build -f app/Dockerfile -t vaccine_project .
+make image
 ```
 
-This command builds the Docker image for ingesting and setting up the database, with the tag `vaccine_project`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
+This command builds the Docker image, with the tag `vaccine_project_mjk3551`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
 
-### 2.3 Acquire data
+### 2.2 Run acquire and create database
 
-To aqcuire raw data, run from this directory:
+To acquire raw data, create the database and upload the raw data to S3, run from this directory:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
-  vaccine_project run.py acquire --s3path {your_s3_path}
+make acquire
 ```
 
-`--s3path` is an optional argument. This argument is the path in an s3 bucket the data will be uploaded to. This command runs the `run.py` command in the `vaccine_project` image to download the data from the source website, unzip it, and optionally push the data into S3. The location the file downloaded from the source url is configurable and located in `config/test.yaml`. Although configurable, it is not recommended that these locations change as errors may occur.
+The raw data will be uploaded to the S3 path: `s3://2021-msia423-ko-matthew/raw/pulse2021.csv`. If you do not have the environment variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` set, this step will result in an error.
 
-### 3.1 Run the pipeline and run the app locally
+### 3. Run the model training pipeline
 
-This step follows the creation of the database and acquisition of the raw data. If environment variables indicated above are set correctly, it will attempt to connect to AWS where the database was created in the previous step.
-
-### 3.2 Build the image for the pipeline
-
-This step is required and will build the image required to run the pipeline beginning after the data is acquired and the database is created. Run the following command from root of the directory.
+This step follows the creation of the database and acquisition of the raw data. If environment variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` indicated above are set correctly, run the following step and it will upload the training artifacts to S3. In addition, the directory is mounted so you should see the artifacts in the data and models folder.
 
 ```bash
- docker build -f app/Dockerfile_pipe -t vaccine_pipeline .
+make pipeline
 ```
 
-### 3.3 Run the pipeline and app with S3 and RDS
+### 4. Run the app
 
-This step collects the data from a specified S3 bucket, cleans the data, trains a model and saves it, then runs the app locally. The specified S3 path is `s3://2021-msia423-ko-matthew/raw/pulse2021.csv`. If you added your data to a specified path in the previous step, please change the specified path in `app/boot.sh`. If you would like to run the pipeline and app without any S3 or RDS credentials, there will be a separate step below.
+This step follows the model training pipeline and requires the artifacts created in step 3. If the environment variable `SQLALCHEMY_DATABASE_URI` is set, it will attempt to use the specified database, otherwise it will use the default database created in step 2.3.
 
-Run this command from the root directory:
+Run from the root directory:
 
-```{bash}
-docker run \
-    -e MYSQL_HOST \
-    -e MYSQL_USER \
-    -e DATABASE_NAME \
-    -e MYSQL_PASSWORD \
-    -e MYSQL_PORT \
-    -e SQLALCHEMY_DATABASE_URI \
-    -e AWS_ACCESS_KEY_ID \
-    -e AWS_SECRET_ACCESS_KEY \
-    -p 5000:5000 \
-    vaccine_pipeline
+```bash
+make app
 ```
 
 After the command finishes, you should be able to access the app at: http://0.0.0.0:5000/
-
-### 3.4 Run the pipeline and app without S3 and RDS
-
-This step should be run if you do not have S3 or RDS credentials that you would like to run with this application. Be sure to run step 2 and acquire the data and create the database locally before running this step.
-
-Run these commands from the root directory:
-
-```bash
- docker build -f app/Dockerfile_local -t vaccine_pipeline .
-```
-
-```{bash}
-docker run \
-    -p 5000:5000 \
-    vaccine_pipeline
-```
-
-After the command finishes, you should be able to access the app at: http://0.0.0.0:5000/
-
-### 2. Build the image
-
-The Dockerfile used for running the ingestion and setting up the database is located in the `app/` folder.
-
-To build the image for ingesting the data and setting up the database, run this command from the root of the repository:
-
-```bash
- docker build -f app/Dockerfile -t vaccine_project .
-```
-
-This command builds the Docker image for ingesting and setting up the database, with the tag `vaccine_project`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
-
-### 3. Push data to S3
-
-To push data to S3, run from this directory:
-
-```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
-  vaccine_project run.py ingest --s3path {your_s3_path}
-```
-
-`--s3path` is a required argument. This argument is the path in an s3 bucket the data will be uploaded to. This command runs the `run.py` command in the `vaccine_project` image to download the data from the source website, unzip it, and push the data into S3. The location the file downloaded from the source url is configurable and located in `config/config.py`. Although configurable, it is not recommended that these locations change as errors may occur.
-
-### 4. Initialize the database
-
-#### Create the database
-To create the database either in RDS or locally run from this directory:
-
-```bash
-docker run \
-    -e MYSQL_HOST \
-    -e MYSQL_USER \
-    -e DATABASE_NAME \
-    -e MYSQL_PASSWORD \
-    -e MYSQL_PORT \
-    -e SQLALCHEMY_DATABASE_URI \
-    -e AWS_ACCESS_KEY_ID \
-    -e AWS_SECRET_ACCESS_KEY \
-    -p 5000:5000 \
-    vaccine_project
-```
-
-If the MYSQL_HOST environment variable is set, the above command will attempt to connect to AWS RDS services and create the database there at the specified RDS instance.
-
-Without a MYSQL_HOST environment variable set, the above command creates a local database located at `sqlite:///data/vSentiment.db`. If you would like to set the location of the database, please set the `SQLALCHEMY_DATABASE_URI` environment variable to the appropriate connection string before running the above command and pass it into the docker run command above instead of / in addition to the environment variables listed above. Otherwise, `SQLALCHEMY_DATABASE_URI` will be automatically generated from the `MYSQL_*` variables or set to `sqlite:///data/vSentiment.db`.
-
-For midpoint PR: The table name created is called "vaccine_model" in both RDS and the local database. For chloe and fausto's convenience, will be removed later. I was able to see the table in RDS and use the local vSentiment.db using pandas.read_sql and sqlalchemy.
