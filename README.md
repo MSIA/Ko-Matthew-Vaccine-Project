@@ -92,7 +92,7 @@ If the SQLALCHEMY_DATABASE_URI is not set when running the app, it will use a lo
 
 This step is required if you would like to run the app locally without connections to AWS S3 or RDS. This step will download the data from the source site as well as create a local database that are both required for the app. Optionally this step will allow the user to push the raw data into their own s3 bucket.
 
-### 2.2 Build the image
+### 2.1 Build the image
 
 The Dockerfile used for running the ingestion and setting up the database is located in the `app/` folder.
 
@@ -124,9 +124,9 @@ make pipeline
 
 ### 4. Run the app
 
-This step follows the model training pipeline and requires the artifacts created in step 3. If the environment variable `SQLALCHEMY_DATABASE_URI` is set, it will attempt to use the specified database, otherwise it will use the default database created in step 2.3.
+This step follows the model training pipeline and requires the artifacts created in step 3. If the environment variable `SQLALCHEMY_DATABASE_URI` is set, it will attempt to use the specified database, otherwise it will use the default database created in step 2.2.
 
-Note: If you are attempting to connect to the RDS database as part of Northwestern MSiA program with credentials set in the SQLALCHEMY_DATABASE_URI, please remember to connect to the Northwestern VPN. 
+Note: If you are attempting to connect to the RDS database as part of Northwestern MSiA program with credentials set in the SQLALCHEMY_DATABASE_URI, please remember to connect to the Northwestern VPN.
 
 Run from the root directory:
 
