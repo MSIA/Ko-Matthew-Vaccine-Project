@@ -39,4 +39,4 @@ app: data/clean/clean.csv models/model.pkl models/encoder.pkl flask
 
 pipeline: clean model
 
-.PHONY: tests clean all raw model acquire app flask
+.PHONY: tests clean all raw model acquire app flask image
