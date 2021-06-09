@@ -17,6 +17,7 @@ clean: data/raw/pulse2021_puf_27.csv
 
 model: data/clean/clean.csv
 				docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
+				--mount type=bind,source="$(shell pwd)",target=/app/ \
 				 vaccine_project_mjk3551 run.py train \
 				--s3_clean s3://2021-msia423-ko-matthew/clean/clean.csv \
 				--s3_model s3://2021-msia423-ko-matthew/model/model.pkl \
