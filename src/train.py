@@ -106,12 +106,18 @@ def get_model(model_path, encoder_path):
     except FileNotFoundError:
         logger.error("File %s not found at ", model_path)
         logger.debug("Check path in the configuration file")
+    except Exception as e:
+        logger.error("General error reading file: ", e)
+        logger.debug("Check file location for: %s", model_path)
     try:
         with open(encoder_path, "rb") as input_file:
             enc = pickle.load(input_file)
     except FileNotFoundError:
         logger.error("File %s not found at ", encoder_path)
         logger.debug("Check path in the configuration file")
+    except Exception as e:
+        logger.error("General error reading file: ", e)
+        logger.debug("Check file location for: %s", encoder_path)
 
     return model, enc
 

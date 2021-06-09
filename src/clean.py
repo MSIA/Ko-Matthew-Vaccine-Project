@@ -22,8 +22,10 @@ def clean(local_path, columns, response, threshold, null_vals, other, save_path)
     try:
         df = pd.read_csv(local_path)
     except FileNotFoundError:
-        logger.error("File %s not found at ", local_path)
+        logger.error("File %s not found", local_path)
         logger.debug("Check path in the configuration file")
+    except Exception as e:
+        logger.error("General error reading file: ", e)
     df = filter(df, columns, response, threshold)
     df = replace_na(df, null_vals, other)
     df = df.drop(response, axis=1)
