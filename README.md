@@ -14,6 +14,7 @@
     + [Run acquire and create database](#run-acquire-and-create-database)
   * [3. Run the model training pipeline](#3-run-the-model-training-pipeline)
   * [4. Run the app](#4-run-the-app)
+  * [5. Run tests](#5-run-tests)
 
 <!-- tocstop -->
 
