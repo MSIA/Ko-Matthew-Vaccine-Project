@@ -90,7 +90,8 @@ def response_page(class1, class2, class3, prob1, prob2, prob3):
             return render_template('response.html', responses=response,
                                    probabilities=probs)
         except Exception as e:
-            logger.error(e)
+            logger.error("Error getting page: ", e)
+            logger.debug("Make sure to fill entire form")
             return render_template('error.html')
 
     if request.method == "POST":
