@@ -11,6 +11,7 @@ __pycache__/
 *.csv
 *.zip
 .ipynb_checkpoints/
+.pytest_cache/
 
 !data/additional/*
 config/local/*
