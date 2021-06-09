@@ -41,7 +41,7 @@ def train(local_path, category_cols, response_cols, year_col, results_path,
     enc = OneHotEncoder().fit(df[category_cols])
     features = enc.transform(df[category_cols])
     year = df[year_col].reset_index(drop=True)
-    features = pd.concat([pd.DataFrame(features.toarray()),year], axis=1)
+    features = pd.concat([pd.DataFrame(features.toarray()), year], axis=1)
     response = np.array(df[response_cols])
     model = train_evaluate(features, response, results_path, test_size,
                            random_state, max_depth, n_estimators)
@@ -67,14 +67,13 @@ def train_evaluate(features, response, results_path, test_size, random_state,
     Returns:
         ovr (sklearn.multiclass.OneVsRestClassifier): multilabel random forest model
     '''
-    X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(
-                                                        features, response,
-                                                        test_size=test_size,
-                                                        random_state=random_state)
+    X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(features, response,
+                                                                                test_size=test_size,
+                                                                                random_state=random_state)
     model = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth,
                                    random_state=random_state)
     logger.debug("Model training")
-    ovr = OneVsRestClassifier(model).fit(X_train,y_train)
+    ovr = OneVsRestClassifier(model).fit(X_train, y_train)
     ypred_bin_test = ovr.predict(X_test)
     ypred_proba_test = ovr.predict_proba(X_test)
     auc = sklearn.metrics.roc_auc_score(y_test, ypred_proba_test)
@@ -83,7 +82,7 @@ def train_evaluate(features, response, results_path, test_size, random_state,
                                                     output_dict=True)
     results = [creport, {"AUC": str(auc), "Hamming Loss": str(hamming_loss)}]
     with open(results_path, 'w') as file:
-            outdoc = yaml.dump(results, file)
+        outdoc = yaml.dump(results, file)
     logger.info("Model results written to: %s", results_path)
 
     return ovr
@@ -134,7 +133,7 @@ def transform(encoder, cat_inputs, year):
         test_new (2D :obj:`list` of :obj:`int): encoded inputs for model prediction
     '''
     test_new = encoder.transform([cat_inputs]).toarray()
-    test_new = np.append(test_new[0],year)
+    test_new = np.append(test_new[0], year)
     test_new = [test_new]
     return test_new
 

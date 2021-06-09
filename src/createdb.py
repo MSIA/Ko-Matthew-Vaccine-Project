@@ -39,7 +39,7 @@ def create_db():
 
     try:
         Base.metadata.create_all(engine)
-        logger.info("Database created from %s",  SQLALCHEMY_DATABASE_URI)
+        logger.info("Database created from %s", SQLALCHEMY_DATABASE_URI)
     except sql.exc.OperationalError:
         logger.error('Unable to create database')
         logger.warning('Please connect to Northwestern VPN or campus WiFi,\
@@ -89,7 +89,7 @@ class ResponseManager:
             self.db = SQLAlchemy(app)
             self.session = self.db.session
         elif engine_string:
-            engine = sqlalchemy.create_engine(engine_string)
+            engine = sql.create_engine(engine_string)
             Session = sessionmaker(bind=engine)
             self.session = Session()
         else:

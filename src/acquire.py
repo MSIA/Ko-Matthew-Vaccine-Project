@@ -15,7 +15,7 @@ aws_id = os.environ.get('AWS_ACCESS_KEY_ID')  # AWS ID as environment variable
 aws_key = os.environ.get('AWS_SECRET_ACCESS_KEY')  # AWS Key as environment variable
 
 
-def get_zip(url,file_name):
+def get_zip(url, file_name):
     '''Downloads a file and writes it to current directory
 
     Args:
@@ -27,9 +27,9 @@ def get_zip(url,file_name):
     '''
     try:
         with open(file_name, "wb") as f:
-            r = requests.get(url, stream=True,timeout=30)
+            r = requests.get(url, stream=True, timeout=30)
             f.write(r.content)
-        logger.info('Zip file successfully downloaded from source, placed in %s',file_name)
+        logger.info('Zip file successfully downloaded from source, placed in %s', file_name)
     except requests.ConnectionError:
         logger.error('Could not download: Connection error')
     except requests.Timeout:
@@ -51,8 +51,8 @@ def unzip(source_path, destination_path, data_filename):
     '''
     try:
         with ZipFile(source_path, 'r') as zipObj:
-            zipObj.extract(data_filename,destination_path)
-        logger.info('File successfully unzipped and extracted, located at %s',destination_path)
+            zipObj.extract(data_filename, destination_path)
+        logger.info('File successfully unzipped and extracted, located at %s', destination_path)
     except:
         logger.error('File %s was not able to be unzipped', source_path)
 
@@ -108,7 +108,7 @@ def download_s3(s3path, local_path, sep):
         local_path (str): the filepath location of file that will be downloaded to
         s3path (str): the path where the file will be located on s3
         sep (str): separator for downloaded file
-        
+
     Returns:
         None
     '''

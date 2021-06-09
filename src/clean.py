@@ -45,7 +45,7 @@ def filter(df, columns, response, threshold):
         dfm (pandas.core.frame.DataFrame): DataFrame holding filtered data
     '''
     dfm = df[columns]
-    dfm = dfm[df[response]>threshold]
+    dfm = dfm[df[response] > threshold]
 
     return dfm
 

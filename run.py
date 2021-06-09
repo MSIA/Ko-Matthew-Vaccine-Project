@@ -13,7 +13,7 @@ logging.config.fileConfig('config/logging/local.conf')
 # Add parsers for both creating a database and uploading source data to s3 bucket
 parser = argparse.ArgumentParser(description='Create database or upload data to s3')
 parser.add_argument('--config', default='config/test.yaml',
-                        help='Path to configuration file')
+                    help='Path to configuration file')
 
 subparsers = parser.add_subparsers(dest='subparser_name')
 

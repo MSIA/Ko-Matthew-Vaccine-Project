@@ -56,7 +56,7 @@ def home():
             prediction = predict_ind(model, enc, cat_vars, year)
             top3 = np.argsort(prediction)[::-1]  # Gets indices sorted array descending
             top3 = top3[:3]  # Gets top 3 highest probabilities indexes
-            top3_probs = [np.round(prediction[i],2) for i in top3]  # Gets top 3 highest probabilities
+            top3_probs = [np.round(prediction[i], 2) for i in top3]  # Gets top 3 highest probabilities
             url_for_post = url_for('response_page', class1=top3[0], class2=top3[1],
                                    class3=top3[2], prob1=top3_probs[0],
                                    prob2=top3_probs[1], prob3=top3_probs[2])
