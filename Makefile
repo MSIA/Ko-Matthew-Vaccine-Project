@@ -5,14 +5,12 @@ db:
 				docker run \
 				--mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py create_db
 
-data/raw/pulse2021_puf_27.csv: raw
-
 raw:
 				docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
 				--mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire \
 				--s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv
 
-data/clean/clean.csv: data/raw/pulse2021_puf_27.csv
+data/clean/clean.csv:
 				docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
 				--mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py clean \
 				--s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv --s3_clean s3://2021-msia423-ko-matthew/clean/clean.csv
