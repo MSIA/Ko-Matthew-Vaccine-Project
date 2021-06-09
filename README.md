@@ -175,3 +175,19 @@ docker run -e SQLALCHEMY_DATABASE_URI --mount type=bind,source="$(pwd)",target=/
 ```
 
 After the command finishes, you should be able to access the app at: http://0.0.0.0:5000/
+
+### 5. Run tests
+
+This step runs unit tests in pytest.
+
+Run from the root directory:
+
+```bash
+make tests
+```
+
+Or
+
+```bash
+docker run vaccine_project_mjk3551 -m pytest
+```
