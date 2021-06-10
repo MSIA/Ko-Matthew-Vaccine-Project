@@ -88,7 +88,7 @@ export SQLALCHEMY_DATABASE_URI="{dialect}://{user}:{pw}@{host}:{port}/{db}"
 ```
 
 The form of SQLALCHEMY_DATABASE_URI is above, where `dialect` is the type of sql database connecting to, the `user` is the database user, `pw` is the password, `host` is the host of the connection, along with the `port` and name of database `db`. If local, the SQLALCHEMY_DATABASE_URI is set by default to `sqlite:///data/vSentiment.db`.
-If the SQLALCHEMY_DATABASE_URI is not set when running the app, it will use a locally created database. Instructions to create this database is in step 2.
+If the SQLALCHEMY_DATABASE_URI is not set when running the app, it will use a locally created database. Instructions to create this database are in step 2.
 
 ### 2. Create database and acquire data from source
 

@@ -42,7 +42,6 @@ sp_used = args.subparser_name
 
 
 if __name__ == '__main__':
-
     with open(args.config, "r") as f:
         y_conf = yaml.load(f, Loader=yaml.FullLoader)
 
