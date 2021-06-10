@@ -38,9 +38,10 @@ def train(local_path, category_cols, response_cols, year_col, results_path,
     except FileNotFoundError:
         logger.error("File %s not found at ", local_path)
         logger.debug("Check path in the configuration file")
-    enc = OneHotEncoder().fit(df[category_cols])
+    enc = OneHotEncoder().fit(df[category_cols])  # fit to categorical vars
     features = enc.transform(df[category_cols])
-    year = df[year_col].reset_index(drop=True)
+    year = df[year_col].reset_index(drop=True)  # get year of birth alone
+    # concatenate categorical features and year of birth feature
     features = pd.concat([pd.DataFrame(features.toarray()), year], axis=1)
     response = np.array(df[response_cols])
     model = train_evaluate(features, response, results_path, test_size,
@@ -132,9 +133,9 @@ def transform(encoder, cat_inputs, year):
     Returns:
         test_new (2D :obj:`list` of :obj:`int): encoded inputs for model prediction
     '''
-    test_new = encoder.transform([cat_inputs]).toarray()
-    test_new = np.append(test_new[0], year)
-    test_new = [test_new]
+    test_new = encoder.transform([cat_inputs]).toarray()  # needs 2d array
+    test_new = np.append(test_new[0], year)  # encoder returns 2d array, need element inside
+    test_new = [test_new]  # predict function expects 2d arrray
     return test_new
 
 

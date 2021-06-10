@@ -28,7 +28,7 @@ def clean(local_path, columns, response, threshold, null_vals, other, save_path)
         logger.error("General error reading file: ", e)
     df = filter(df, columns, response, threshold)
     df = replace_na(df, null_vals, other)
-    df = df.drop(response, axis=1)
+    df = df.drop(response, axis=1)  # only needed people who were not getting vaccine
     df.to_csv(save_path, index=False)
 
 
@@ -45,8 +45,7 @@ def filter(df, columns, response, threshold):
         dfm (pandas.core.frame.DataFrame): DataFrame holding filtered data
     '''
     dfm = df[columns]
-    dfm = dfm[df[response] > threshold]
-
+    dfm = dfm[df[response] > threshold]  # response variable is integer
     return dfm
 
 
@@ -62,5 +61,5 @@ def replace_na(df, nulls, other):
         df (pandas.core.frame.DataFrame): DataFrame holding replaced values
     '''
     for val in nulls:
-        df = df.replace(val, other)
+        df = df.replace(val, other)  # na are coded as special integers
     return df
