@@ -13,7 +13,7 @@ raw:
 data/clean/clean.csv:
 				docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
 				--mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py clean \
-				--s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv 
+				--s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv
 
 clean: data/clean/clean.csv
 
@@ -42,4 +42,4 @@ app: data/clean/clean.csv models/model.pkl models/encoder.pkl flask
 
 pipeline: clean model
 
-.PHONY: tests clean all raw model acquire app flask image pipeline
+.PHONY: tests clean all raw model acquire app flask image pipeline data/clean/clean.csv models/model.pkl
