@@ -15,6 +15,7 @@
   * [3. Run the model training pipeline](#3-run-the-model-training-pipeline)
   * [4. Run the app](#4-run-the-app)
   * [5. Run tests](#5-run-tests)
+  * [6. Clean commands](#6-clean-command)
 
 <!-- tocstop -->
 
@@ -193,7 +194,7 @@ Or
 docker run vaccine_project_mjk3551 -m pytest
 ```
 
-### 6. Useful commands
+### 6. Clean command
 
 Clean out your data and model folders to run certain commands again. For example, running `make app` before `make pipeline` will create the artifacts needed for the app, which are namely the models and results. Then running `make pipeline` will result in:  `make: Nothing to be done for `pipeline'`. If you would like to run this command without the app, please run the following command.
 
