@@ -130,7 +130,7 @@ docker run --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk355
 Acquire raw data and upload it to S3:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire --s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire
 ```
 
 The raw data will be uploaded to the S3 path: `s3://2021-msia423-ko-matthew/raw/pulse2021.csv`. If you do not have the environment variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` set, this step will result in an error.
@@ -148,13 +148,13 @@ Or you can use docker commands to run each step individually. However, it is rec
 Clean the raw data:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py clean --s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py clean
 ```
 
 Train and evaluate model:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py train --s3_clean s3://2021-msia423-ko-matthew/clean/clean.csv 
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py train
 ```
 
 ### 4. Run the app
@@ -191,4 +191,12 @@ Or
 
 ```bash
 docker run vaccine_project_mjk3551 -m pytest
+```
+
+### 6. Useful commands
+
+Clean out your data and model folders to run certain commands again. For example, running `make app` before `make pipeline` will create the artifacts needed for the app, which are namely the models and results. Then running `make pipeline` will result in:  `make: Nothing to be done for `pipeline'`. If you would like to run this command without the app, please run the following command.
+
+```bash
+make clean
 ```

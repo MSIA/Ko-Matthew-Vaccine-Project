@@ -7,21 +7,18 @@ db:
 
 raw:
 				docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
-				--mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire \
-				--s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv
+				--mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire
 
 data/clean/clean.csv:
 				docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
-				--mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py clean \
-				--s3_raw s3://2021-msia423-ko-matthew/raw/pulse2021.csv
+				--mount type=bind,source="$(shell pwd)",target=/app/ vaccine_project_mjk3551 run.py clean
 
-clean: data/clean/clean.csv
+cleaned: data/clean/clean.csv
 
 models/model.pkl: data/clean/clean.csv
 				docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY \
 				--mount type=bind,source="$(shell pwd)",target=/app/ \
-				 vaccine_project_mjk3551 run.py train \
-				--s3_clean s3://2021-msia423-ko-matthew/clean/clean.csv
+				 vaccine_project_mjk3551 run.py train
 
 model: models/model.pkl
 
@@ -36,10 +33,15 @@ flask: models/model.pkl models/encoder.pkl
 tests:
 				docker run vaccine_project_mjk3551 -m pytest
 
+clean:
+				rm data/clean/*
+				rm data/raw/*
+				rm models/*
+
 acquire: db raw
 
-app: data/clean/clean.csv models/model.pkl models/encoder.pkl flask
+app: models/model.pkl models/encoder.pkl flask
 
-pipeline: clean model
+pipeline: cleaned model
 
-.PHONY: tests clean all raw model acquire app flask image pipeline data/clean/clean.csv models/model.pkl
+.PHONY: tests cleaned clean raw model acquire flask image pipeline app
