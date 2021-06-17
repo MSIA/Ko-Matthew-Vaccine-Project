@@ -1,4 +1,4 @@
-# MSiA423 Project: Mid-Pandemic Water Cooler Conversations
+# Model Deployment Project: Mid-Pandemic Water Cooler Conversations
 ### Author: Matthew Ko
 ### QA: Christina Chang
 
@@ -69,12 +69,11 @@ The business metric will be tracked by the number of users. If the number of use
 ### 1. Set up environment variables
 
 Configuration files for running web app are located in the `config/` folder.
-`config.py` includes variables to configure local data storage, as well as S3 bucket information\
 flaskconfig.py includes configurations for flask app, including local and RDS MYSQL databases.
 
 #### 1.1: How to set up environment variables required
 
-The following environment variables are needed for the application to run in relation to AWS S3 and and RDS services.
+The following environment variables are needed for the application to run in relation to AWS S3 and and RDS services. If you would like to run the app completely locally, skip this step.
 
 For S3 services:
 ```bash
@@ -107,10 +106,10 @@ make image
 Or building it directly with docker, run:
 
 ```bash
-docker build -f app/Dockerfile -t vaccine_project_mjk3551 .
+docker build -f app/Dockerfile -t vaccine_project .
 ```
 
-This command builds the Docker image, with the tag `vaccine_project_mjk3551`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
+This command builds the Docker image, with the tag `vaccine_project`, based on the instructions in `app/Dockerfile` and the files existing in this directory.
 
 ### 2.2 Run acquire and create database
 
@@ -125,13 +124,13 @@ Or you can use run docker commands to run these steps individually:
 Create database:
 
 ```bash
-docker run --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py create_db
+docker run --mount type=bind,source="$(pwd)",target=/app/ vaccine_project run.py create_db
 ```
 
 Acquire raw data and upload it to S3:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py acquire
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project run.py acquire
 ```
 
 The raw data will be uploaded to the S3 path: `s3://2021-msia423-ko-matthew/raw/pulse2021.csv`. If you do not have the environment variables `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` set, this step will result in an error.
@@ -149,13 +148,13 @@ Or you can use docker commands to run each step individually. However, it is rec
 Clean the raw data:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py clean
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project run.py clean
 ```
 
 Train and evaluate model:
 
 ```bash
-docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project_mjk3551 run.py train
+docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY --mount type=bind,source="$(pwd)",target=/app/ vaccine_project run.py train
 ```
 
 ### 4. Run the app
@@ -173,7 +172,7 @@ make app
 Alternatively, you can run the functionality above, with a docker command.
 
 ```bash
-docker run -e SQLALCHEMY_DATABASE_URI --mount type=bind,source="$(pwd)",target=/app/ -p 5000:5000 vaccine_project_mjk3551 app.py
+docker run -e SQLALCHEMY_DATABASE_URI --mount type=bind,source="$(pwd)",target=/app/ -p 5000:5000 vaccine_project app.py
 ```
 
 After the command finishes, you should be able to access the app at: http://0.0.0.0:5000/
@@ -191,7 +190,7 @@ make tests
 Or
 
 ```bash
-docker run vaccine_project_mjk3551 -m pytest
+docker run vaccine_project -m pytest
 ```
 
 ### 6. Clean command
